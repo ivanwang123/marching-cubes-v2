@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
+import { CHUNK_HEIGHT, CHUNK_SIZE } from "./constants";
 import { generateNoiseMap } from "./noiseMapGenerator";
-import { edges, edgeCorners, table } from "./triangulation";
-import { CHUNK_SIZE, CHUNK_HEIGHT } from "./constants";
-import { NoiseMap } from "./types";
+import { edgeCorners, edges, table } from "./triangulation";
+import { Generate } from "./types";
 
 const SURFACE_LEVEL = 0;
 
@@ -11,24 +11,25 @@ export function generateChunk(
   chunkX: number,
   chunkY: number,
   chunkZ: number,
-  noiseMap?: NoiseMap | null,
-  noiseLayers?: number[]
+  generate?: Generate | null
 ) {
   let geoms = [];
 
+  let noiseMap = generate?.noiseMap;
   if (!noiseMap) {
-    if (noiseLayers) {
-      noiseMap = generateNoiseMap(chunkX, chunkY, chunkZ, noiseLayers);
+    if (generate?.noiseLayers) {
+      noiseMap = generateNoiseMap(
+        chunkX,
+        chunkY,
+        chunkZ,
+        generate.noiseLayers,
+        generate.seed
+      );
     } else {
-      noiseMap = generateNoiseMap(chunkX, chunkY, chunkZ);
+      noiseMap = generateNoiseMap(chunkX, chunkY, chunkZ, null, generate?.seed);
     }
   }
 
-  let deltaTime = 0;
-  let deltaBefore = 0;
-  let deltaAfter = 0;
-
-  let beforeTime = new Date().getTime();
   // Create cube based on noise map
   let cubeCounter = 0;
   let y = 0;
@@ -97,7 +98,6 @@ export function generateChunk(
             // edgeInterpolate3 = parseFloat(edgeInterpolate3.toFixed(3));
 
             // Create surface with edges
-            deltaBefore = new Date().getTime();
             let geom = new THREE.BufferGeometry();
             let vertices = new Float32Array([
               // (edge1[0] === 0.5 ? edgeInterpolate1 : edge1[0]) + xOffset,
@@ -147,9 +147,6 @@ export function generateChunk(
             geom.translate(xOffset, yOffset, zOffset);
             geoms.push(geom);
 
-            deltaAfter = new Date().getTime();
-            deltaTime += deltaAfter - deltaBefore;
-
             e += 3;
           }
         }
@@ -170,9 +167,6 @@ export function generateChunk(
       side: THREE.DoubleSide,
     })
   );
-  let afterTime = new Date().getTime();
-  // console.log("GENERATE MESH", afterTime - beforeTime);
-  // console.log("GENERATE MESH DELTA", deltaTime);
 
   return mesh;
 }

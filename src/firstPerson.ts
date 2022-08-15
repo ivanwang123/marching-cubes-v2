@@ -2,14 +2,13 @@ import "./style.css";
 
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { generateChunk } from "./chunkGenerator";
-import { CHUNK_SIZE, CHUNK_HEIGHT, storageKeys } from "./constants";
-import { getChunkKey } from "./utils";
 import Worker from "web-worker";
+import { generateChunk } from "./chunkGenerator";
+import { CHUNK_HEIGHT, CHUNK_SIZE, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
-import { generateNoiseMap } from "./noiseMapGenerator";
-import { editNoiseMap, editNoiseMapChunks } from "./noiseMapEditor";
-import { LoadedChunks, NoiseMap } from "./types";
+import { editNoiseMapChunks } from "./noiseMapEditor";
+import { LoadedChunks, NoiseLayers, NoiseMap } from "./types";
+import { getChunkKey, getSeed } from "./utils";
 
 /* ============ SETUP ============ */
 
@@ -67,13 +66,15 @@ window.addEventListener("click", () => {
 
 /* ============ GENERATE WORLD ============ */
 
-const beforeTime = new Date().getTime();
+let seed = getSeed();
 
 let loadedChunks: LoadedChunks = {};
 
 let noiseMapStr = sessionStorage.getItem(storageKeys.NOISE_MAP);
 let noiseLayersStr = sessionStorage.getItem(storageKeys.NOISE_LAYERS);
-let noiseLayers = noiseLayersStr?.split(",").map((layer) => parseInt(layer));
+let noiseLayers = noiseLayersStr
+  ? (noiseLayersStr.split(",").map((layer) => parseInt(layer)) as NoiseLayers)
+  : null;
 
 for (let x = -1; x < 2; x++) {
   for (let z = -1; z < 2; z++) {
@@ -97,14 +98,14 @@ for (let x = -1; x < 2; x++) {
         }
         noiseMap.push(plane);
       }
-      let mesh = generateChunk(0, 0, 0, noiseMap);
+      let mesh = generateChunk(0, 0, 0, { noiseMap });
 
       scene.add(mesh);
       loadedChunks[getChunkKey(0, 0)] = { mesh, noiseMap };
     } else {
       let mesh = null;
       if (noiseLayers) {
-        mesh = generateChunk(x, 0, z, undefined, noiseLayers);
+        mesh = generateChunk(x, 0, z, { noiseLayers, seed });
       } else {
         mesh = generateChunk(x, 0, z);
       }
@@ -113,9 +114,6 @@ for (let x = -1; x < 2; x++) {
     }
   }
 }
-
-const afterTime = new Date().getTime();
-// console.log("DELTA", afterTime - beforeTime);
 
 /* ============ WORKER POOL ============ */
 
@@ -227,7 +225,7 @@ function move() {
       let chunkKey = getChunkKey(x, z);
       if (!(chunkKey in loadedChunks)) {
         loadedChunks[chunkKey] = { mesh: null, noiseMap: null };
-        workerPool[workerIndex].postMessage([x, z, noiseLayers]);
+        workerPool[workerIndex].postMessage([x, z, noiseLayers, seed]);
         workerIndex = (workerIndex + 1) % NUM_WORKERS;
       }
     }
@@ -249,14 +247,15 @@ function editTerrain() {
         loadedChunks,
         intersects[0].point,
         !mouse[0] && mouse[1],
-        noiseLayers
+        noiseLayers,
+        seed
       );
       editChunks.forEach((chunk) => {
         const chunkKey = getChunkKey(chunk[0], chunk[1]);
         const { mesh: oldMesh, noiseMap } = loadedChunks[chunkKey];
 
         disposeNode(scene, oldMesh);
-        const mesh = generateChunk(chunk[0], 0, chunk[1], noiseMap);
+        const mesh = generateChunk(chunk[0], 0, chunk[1], { noiseMap });
         loadedChunks[chunkKey].mesh = mesh;
 
         scene.add(mesh);

@@ -1,56 +1,14 @@
-import { CHUNK_SIZE, CHUNK_HEIGHT } from "./constants";
+import { CHUNK_HEIGHT, CHUNK_SIZE } from "./constants";
 import { generateNoiseMap } from "./noiseMapGenerator";
+import { LoadedChunks, NoiseLayers, NoiseMap, Seed } from "./types";
 import { getChunkKey } from "./utils";
-import { NoiseMap } from "./types";
-
-export function editNoiseMap(
-  noiseMap: NoiseMap,
-  worldPoint: THREE.Vector3,
-  chunkX: number,
-  chunkY: number,
-  chunkZ: number,
-  remove: boolean = false
-) {
-  worldPoint.x += CHUNK_SIZE * (chunkX + 0.5);
-  worldPoint.y += CHUNK_HEIGHT * chunkY;
-  worldPoint.z += CHUNK_SIZE * (chunkZ + 0.5);
-
-  const mapX =
-    ((Math.floor(worldPoint.x) % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE;
-  const mapY =
-    ((Math.floor(worldPoint.y) % CHUNK_HEIGHT) + CHUNK_HEIGHT) % CHUNK_HEIGHT;
-  const mapZ =
-    ((Math.floor(worldPoint.z) % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE;
-
-  const radius = 2;
-
-  const addOrRemove = remove ? 1 : -1;
-
-  for (let y = mapY - radius; y <= mapY + radius; y++) {
-    if (y <= 0 || y >= CHUNK_HEIGHT) continue;
-    for (let z = mapZ - radius; z <= mapZ + radius; z++) {
-      if (z <= 0 || z >= CHUNK_SIZE) continue;
-      for (let x = mapX - radius; x <= mapX + radius; x++) {
-        if (x <= 0 || x >= CHUNK_SIZE) continue;
-        noiseMap[y][z][x] +=
-          (addOrRemove *
-            (radius * radius * 3 -
-              ((mapY - y) * (mapY - y) +
-                (mapZ - z) * (mapZ - z) +
-                (mapX - x) * (mapX - x)))) /
-          60;
-      }
-    }
-  }
-
-  return noiseMap;
-}
 
 export function editNoiseMapChunks(
-  loadedChunks: any,
+  loadedChunks: LoadedChunks,
   worldPoint: THREE.Vector3,
   remove: boolean,
-  noiseLayers?: number[] | null
+  noiseLayers?: NoiseLayers | null,
+  seed?: Seed | null
 ) {
   const chunkX = Math.floor((worldPoint.x + CHUNK_SIZE / 2) / CHUNK_SIZE);
   const chunkZ = Math.floor((worldPoint.z + CHUNK_SIZE / 2) / CHUNK_SIZE);
@@ -71,7 +29,7 @@ export function editNoiseMapChunks(
       ? loadedChunks[getChunkKey(chunkX, chunkZ)].noiseMap
       : null;
   if (!noiseMap) {
-    noiseMap = generateNoiseMap(chunkX, 0, chunkZ, noiseLayers);
+    noiseMap = generateNoiseMap(chunkX, 0, chunkZ, noiseLayers, seed);
   }
 
   let noiseMapX: NoiseMap | null = null;
@@ -124,40 +82,38 @@ export function editNoiseMapChunks(
 
           if (xInBound <= 0 && zInBound >= 0) {
             const chunkKeyX = getChunkKey(chunkX + chunkXOffset, chunkZ);
-            if (!noiseMapX)
-              noiseMapX =
-                chunkKeyX in loadedChunks
-                  ? loadedChunks[chunkKeyX].noiseMap
-                  : null;
-            if (!noiseMapX) {
-              noiseMapX = generateNoiseMap(
-                chunkX + chunkXOffset,
-                0,
-                chunkZ,
-                noiseLayers
-              );
-            }
+            if (chunkKeyX in loadedChunks) {
+              if (!noiseMapX)
+                noiseMapX =
+                  loadedChunks[chunkKeyX].noiseMap ||
+                  generateNoiseMap(
+                    chunkX + chunkXOffset,
+                    0,
+                    chunkZ,
+                    noiseLayers,
+                    seed
+                  );
 
-            noiseMapX[y][z][x - chunkXOffset * CHUNK_SIZE] += editNoise;
+              noiseMapX[y][z][x - chunkXOffset * CHUNK_SIZE] += editNoise;
+            }
           }
 
           if (zInBound <= 0 && xInBound >= 0) {
             const chunkKeyZ = getChunkKey(chunkX, chunkZ + chunkZOffset);
-            if (!noiseMapZ)
-              noiseMapZ =
-                chunkKeyZ in loadedChunks
-                  ? loadedChunks[chunkKeyZ].noiseMap
-                  : null;
-            if (!noiseMapZ) {
-              noiseMapZ = generateNoiseMap(
-                chunkX,
-                0,
-                chunkZ + chunkZOffset,
-                noiseLayers
-              );
-            }
+            if (chunkKeyZ in loadedChunks) {
+              if (!noiseMapZ)
+                noiseMapZ =
+                  loadedChunks[chunkKeyZ].noiseMap ||
+                  generateNoiseMap(
+                    chunkX,
+                    0,
+                    chunkZ + chunkZOffset,
+                    noiseLayers,
+                    seed
+                  );
 
-            noiseMapZ[y][z - chunkZOffset * CHUNK_SIZE][x] += editNoise;
+              noiseMapZ[y][z - chunkZOffset * CHUNK_SIZE][x] += editNoise;
+            }
           }
 
           if (xInBound <= 0 && zInBound <= 0) {
@@ -165,23 +121,22 @@ export function editNoiseMapChunks(
               chunkX + chunkXOffset,
               chunkZ + chunkZOffset
             );
-            if (!noiseMapXZ)
-              noiseMapXZ =
-                chunkKeyXZ in loadedChunks
-                  ? loadedChunks[chunkKeyXZ].noiseMap
-                  : null;
-            if (!noiseMapXZ) {
-              noiseMapXZ = generateNoiseMap(
-                chunkX + chunkXOffset,
-                0,
-                chunkZ + chunkZOffset,
-                noiseLayers
-              );
-            }
+            if (chunkKeyXZ in loadedChunks) {
+              if (!noiseMapXZ)
+                noiseMapXZ =
+                  loadedChunks[chunkKeyXZ].noiseMap ||
+                  generateNoiseMap(
+                    chunkX + chunkXOffset,
+                    0,
+                    chunkZ + chunkZOffset,
+                    noiseLayers,
+                    seed
+                  );
 
-            noiseMapXZ[y][z - chunkZOffset * CHUNK_SIZE][
-              x - chunkXOffset * CHUNK_SIZE
-            ] += editNoise;
+              noiseMapXZ[y][z - chunkZOffset * CHUNK_SIZE][
+                x - chunkXOffset * CHUNK_SIZE
+              ] += editNoise;
+            }
           }
 
           if (xInBound >= 0 && zInBound >= 0) {

@@ -1,11 +1,7 @@
 import { createNoise3D } from "simplex-noise";
-import { CHUNK_SIZE, CHUNK_HEIGHT, DEFAULT_NOISE_LAYERS } from "./constants";
-import { NoiseMap, NoiseMapCache } from "./types";
+import { CHUNK_HEIGHT, CHUNK_SIZE, DEFAULT_NOISE_LAYERS } from "./constants";
+import { NoiseLayers, NoiseMap, NoiseMapCache, Seed } from "./types";
 import { getChunkKey } from "./utils";
-// import { Perlin } from "three-noise";
-
-const noise = createNoise3D(() => 0.1);
-// const noise = new Perlin(0.1);
 
 // let initialCache = true;
 let noiseMapCache: NoiseMapCache = {};
@@ -14,10 +10,11 @@ export function generateNoiseMap(
   chunkX: number,
   chunkY: number,
   chunkZ: number,
-  noiseLayers?: number[] | null,
+  noiseLayers?: NoiseLayers | null,
+  seed?: Seed | null,
   cacheNoiseMap: boolean = false
 ): NoiseMap {
-  let beforeTime = new Date().getTime();
+  const noise = createNoise3D(() => seed || Math.random());
 
   const noiseMap: NoiseMap = [];
   if (!noiseLayers) noiseLayers = DEFAULT_NOISE_LAYERS;
@@ -39,8 +36,6 @@ export function generateNoiseMap(
       }
     }
   }
-
-  // console.log(initialCache, noiseLayerChanged, noiseMapCache);
 
   let y = 0;
   while (y <= CHUNK_HEIGHT) {
@@ -92,16 +87,18 @@ export function generateNoiseMap(
         // Layer three noise values for more varied terrain
         let noiseValue = noiseOne + noiseTwo + noiseThree + noiseOffset;
 
-        if (initialCache) {
-          lineCache.push([noiseOne, noiseTwo, noiseThree]);
-        } else {
-          // Cache noise values
-          if (noiseLayerChanged[0])
-            noiseMapCache[chunkKey].noiseMap[y][z][x][0] = noiseOne;
-          if (noiseLayerChanged[1])
-            noiseMapCache[chunkKey].noiseMap[y][z][x][1] = noiseTwo;
-          if (noiseLayerChanged[2])
-            noiseMapCache[chunkKey].noiseMap[y][z][x][2] = noiseThree;
+        if (cacheNoiseMap) {
+          if (initialCache) {
+            lineCache.push([noiseOne, noiseTwo, noiseThree]);
+          } else {
+            // Cache noise values
+            if (noiseLayerChanged[0])
+              noiseMapCache[chunkKey].noiseMap[y][z][x][0] = noiseOne;
+            if (noiseLayerChanged[1])
+              noiseMapCache[chunkKey].noiseMap[y][z][x][1] = noiseTwo;
+            if (noiseLayerChanged[2])
+              noiseMapCache[chunkKey].noiseMap[y][z][x][2] = noiseThree;
+          }
         }
 
         line[x] = noiseValue;
@@ -116,8 +113,5 @@ export function generateNoiseMap(
     y++;
   }
 
-  // initialCache = !cacheNoiseMap;
-  let afterTime = new Date().getTime();
-  // console.log("GENERATE NOISE MAP", afterTime - beforeTime);
   return noiseMap;
 }

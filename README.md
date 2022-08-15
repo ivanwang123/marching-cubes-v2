@@ -1,11 +1,11 @@
 # TODO
 
 - [STYLE] adjustable noise
-- [SPLIT] editable terrain
 - [STYLE] first person mode
 - [DONE] infinite generation
-- [CLEAN] save state between steps
-- [CLEAN] editable terrain in first person mode
+- [DONE] save state between steps
+- [DONE] editable terrain in first person mode
+- [REMOVED] editable terrain
 - adjustable smoothness
 - show cubes toggle/wireframe
 - show step by step cube creation
