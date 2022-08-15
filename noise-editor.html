@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noise Editor</title>
+  </head>
+  <body>
+    <input type="range" id="noise-slider-one" min="10" max="100" value="50" />
+    <input type="range" id="noise-slider-two" min="5" max="75" value="25" />
+    <input type="range" id="noise-slider-three" min="2" max="50" value="10" />
+    <button type="button" id="save-btn">Save</button>
+    <button type="button" id="reset-btn">Reset</button>
+    <canvas id="app"></canvas>
+    <script type="module" src="/src/noiseEditor.ts"></script>
+  </body>
+</html>

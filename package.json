@@ -1,0 +1,26 @@
+{
+  "name": "marching-cubes",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/debounce": "^1.2.1",
+    "@types/paralleljs": "^0.0.21",
+    "@types/three": "^0.143.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0"
+  },
+  "dependencies": {
+    "debounce": "^1.2.1",
+    "paralleljs": "^1.1.0",
+    "simplex-noise": "^4.0.0",
+    "three": "^0.143.0",
+    "three-noise": "^1.1.2",
+    "web-worker": "^1.2.0"
+  }
+}
