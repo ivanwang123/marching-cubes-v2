@@ -11,6 +11,8 @@ import Stats from "stats.js";
 
 /* ============ VARIABLES ============ */
 
+const LOAD_CHUNK_RADIUS = 2;
+
 const interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
 const wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
 
@@ -204,10 +206,17 @@ function move() {
     }
   }
 
-  const radius = 1;
   let workerIndex = 0;
-  for (let z = chunkZ - radius; z <= chunkZ + radius; z++) {
-    for (let x = chunkX - radius; x <= chunkX + radius; x++) {
+  for (
+    let z = chunkZ - LOAD_CHUNK_RADIUS;
+    z <= chunkZ + LOAD_CHUNK_RADIUS;
+    z++
+  ) {
+    for (
+      let x = chunkX - LOAD_CHUNK_RADIUS;
+      x <= chunkX + LOAD_CHUNK_RADIUS;
+      x++
+    ) {
       let chunkKey = getChunkKey(x, z);
       if (!(chunkKey in loadedChunks)) {
         loadedChunks[chunkKey] = { mesh: null, noiseMap: null };
