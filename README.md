@@ -1,8 +1,10 @@
 ![Landing page](screenshots/landing-page-rotated.png)
 
-<center style="font-style: italic">
-   A 3D terrain generator
-</center>
+<p align="center">
+   <i>
+      A 3D terrain generator
+   </i>
+</p>
 
 ## Table of Contents
 
@@ -22,13 +24,11 @@
 
 ![Noise editor page](screenshots/noise-editor-video.gif)
 
-<center>
+<p align="center">
   <i>
     Adjustable noise for varied terrain options
   </i>
-</center>
-
-<br/>
+</p>
 
 Uses three layers of noise values at different frequencies and strengths in order to create a more detailed landscape
 
@@ -49,11 +49,11 @@ noiseValue =
 
 ![First person page](screenshots/first-person-video.gif)
 
-<center>
+<p align="center">
   <i>
     Explore the terrain in first person
   </i>
-</center>
+</p>
 
 **Controls**
 
@@ -65,11 +65,11 @@ noiseValue =
 
 ![Edit terrain](screenshots/edit-terrain-video.gif)
 
-<center>
+<p align="center">
   <i>
     Deformable terrain in real time
   </i>
-</center>
+</p>
 
 **Controls**
 
@@ -111,11 +111,11 @@ Repeat this for each cube in a chunk and the result is a terrain-like shape.
 
 ![Marching cubes algorithm](screenshots/marching-cubes-algorithm.png)
 
-<center>
+<p align="center">
   <i>
     Bolded corners are underground and a surface is created to enclose the corner
   </i>
-</center>
+</p>
 
 ## Optimizations
 
