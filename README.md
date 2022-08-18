@@ -19,7 +19,7 @@
 
 ### Noise editor
 
-![Noise editor page](screenshots/noise-editor-video.gif)
+<img src="screenshots/noise-editor-video.gif" width="100%" alt="Noise editor video" />
 
 <p align="center">
   <i>
@@ -44,7 +44,7 @@ noiseValue =
 
 ### First person mode
 
-![First person page](screenshots/first-person-video.gif)
+<img src="screenshots/first-person-video.gif" width="100%" alt="First person video" />
 
 <p align="center">
   <i>
@@ -60,7 +60,7 @@ noiseValue =
 
 ### Terrain editor
 
-![Edit terrain](screenshots/edit-terrain-video.gif)
+<img src="screenshots/edit-terrain-video.gif" width="100%" alt="Edit terrain video" />
 
 <p align="center">
   <i>
