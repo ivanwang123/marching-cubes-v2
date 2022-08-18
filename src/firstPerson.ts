@@ -142,17 +142,60 @@ const groundRaycaster = new THREE.Raycaster(
   camera.position,
   new THREE.Vector3(0, -1, 0)
 );
+const frontRaycaster = new THREE.Raycaster(
+  camera.position.add(new THREE.Vector3(0, 10, 0)),
+  new THREE.Vector3(1, 0, 0)
+);
+const backRaycaster = new THREE.Raycaster(
+  camera.position.add(new THREE.Vector3(0, 10, 0)),
+  new THREE.Vector3(-1, 0, 0)
+);
+const leftRaycaster = new THREE.Raycaster(
+  camera.position.add(new THREE.Vector3(0, 10, 0)),
+  new THREE.Vector3(0, 0, 1)
+);
+const rightRaycaster = new THREE.Raycaster(
+  camera.position.add(new THREE.Vector3(0, 10, 0)),
+  new THREE.Vector3(0, 0, -1)
+);
+
+const checkIntersects = (
+  raycaster: THREE.Raycaster,
+  mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshNormalMaterial>,
+  distance: number
+) => {
+  const intersects = raycaster.intersectObject(mesh);
+  if (intersects.length) {
+    if (intersects[0].distance <= distance) {
+      return true;
+    }
+  }
+  return false;
+};
 
 function move() {
   const chunkX = Math.floor((camera.position.x + CHUNK_SIZE / 2) / CHUNK_SIZE);
   const chunkZ = Math.floor((camera.position.z + CHUNK_SIZE / 2) / CHUNK_SIZE);
 
+  const groundMesh = loadedChunks[getChunkKey(chunkX, chunkZ)].mesh;
+
   const normalizedCameraDir = new THREE.Vector2(
     cameraDir.x,
     cameraDir.z
   ).normalize();
-  const moveX = normalizedCameraDir.x * MOVE_SPEED;
-  const moveZ = normalizedCameraDir.y * MOVE_SPEED;
+  let moveX = normalizedCameraDir.x * MOVE_SPEED;
+  let moveZ = normalizedCameraDir.y * MOVE_SPEED;
+
+  if (groundMesh) {
+    const frontIntersects = checkIntersects(frontRaycaster, groundMesh, 3);
+    const backIntersects = checkIntersects(backRaycaster, groundMesh, 3);
+    const leftIntersects = checkIntersects(leftRaycaster, groundMesh, 3);
+    const rightIntersects = checkIntersects(rightRaycaster, groundMesh, 3);
+    if (frontIntersects && moveX > 0) moveX = 0;
+    if (backIntersects && moveX < 0) moveX = 0;
+    if (leftIntersects && moveZ > 0) moveZ = 0;
+    if (rightIntersects && moveZ < 0) moveZ = 0;
+  }
 
   if (keys[0]) {
     camera.position.x += moveX;
@@ -177,7 +220,6 @@ function move() {
     grounded = false;
   } else {
     try {
-      const groundMesh = loadedChunks[getChunkKey(chunkX, chunkZ)].mesh;
       if (groundMesh) {
         const intersects = groundRaycaster.intersectObject(groundMesh);
         if (intersects.length) {
@@ -189,15 +231,16 @@ function move() {
           } else {
             if (distance - yVelocity < 10) {
               camera.position.y -= distance - 10;
+              grounded = true;
             } else {
               camera.position.y -= yVelocity;
+              grounded = false;
             }
             if (yVelocity < MAX_Y_VELOCITY) {
               yVelocity += GRAVITY;
             } else {
               yVelocity = MAX_Y_VELOCITY;
             }
-            grounded = false;
           }
         }
       }
