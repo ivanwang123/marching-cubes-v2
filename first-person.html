@@ -4,9 +4,95 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/tailwind.css" rel="stylesheet" />
     <title>First Person</title>
   </head>
   <body>
+    <div class="absolute inset-1/2 text-white font-bold z-50">+</div>
+    <div
+      id="top-bar"
+      class="hidden absolute inset-x-0 inset-top-0 flex items-center text-white/70 text-sm p-2 z-50"
+    >
+      Press
+      <h6 class="font-bold mx-1">ESC</h6>
+      to exit
+    </div>
+    <div
+      id="modal"
+      class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 cursor-pointer z-50"
+    >
+      <a
+        href="noise-editor.html"
+        class="absolute left-4 top-4 flex items-center text-white underline-offset-4 hover:underline"
+      >
+        <svg
+          class="w-5 h-5 fill-current mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z"
+          />
+        </svg>
+        Back to noise editor
+      </a>
+      <div
+        class="flex flex-col text-white text-center bg-black border border-white p-8"
+      >
+        <h1 class="font-bold mb-8">CONTROLS</h1>
+        <div class="grid grid-flow-rows gap-4">
+          <div class="flex">
+            <span class="bg-white text-black font-bold px-2 rounded mr-1">
+              W
+            </span>
+            <span class="bg-white text-black font-bold px-2 rounded mr-1">
+              A
+            </span>
+            <span class="bg-white text-black font-bold px-2 rounded mr-1">
+              S
+            </span>
+            <span class="bg-white text-black font-bold px-2 rounded mr-2">
+              D
+            </span>
+            or
+            <span class="bg-white text-black font-bold px-2 rounded ml-2 mr-2">
+              Arrow Keys
+            </span>
+            to move
+          </div>
+          <div class="flex">
+            <span class="bg-white text-black font-bold px-2 rounded mr-2">
+              Space
+            </span>
+            to jump, hold to fly
+          </div>
+          <div class="flex">
+            <span class="bg-white text-black font-bold px-2 rounded mr-2">
+              Mouse
+            </span>
+            to look around
+          </div>
+          <div class="flex">
+            <span class="bg-white text-black font-bold px-2 rounded mr-2">
+              Left Click
+            </span>
+            to add terrain
+          </div>
+          <div class="flex">
+            <span class="bg-white text-black font-bold px-2 rounded mr-2">
+              Right Click
+            </span>
+            to remove terrain
+          </div>
+        </div>
+        <p
+          class="border border-white py-2 px-4 mt-8 transition hover:bg-neutral-800"
+        >
+          Click anywhere to start
+        </p>
+      </div>
+    </div>
     <canvas id="app"></canvas>
     <script type="module" src="/src/firstPerson.ts"></script>
   </body>

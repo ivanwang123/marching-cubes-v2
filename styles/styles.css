@@ -1,0 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+#app {
+  position: absolute;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Righteous", cursive;
+}
+
+.text-see-through {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}

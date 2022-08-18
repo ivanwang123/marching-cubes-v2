@@ -8,7 +8,7 @@ addEventListener("message", (e) => {
       seed: e.data[3],
     });
   } else {
-    mesh = generateChunk(e.data[0], 0, e.data[1]);
+    mesh = generateChunk(e.data[0], 0, e.data[1], { seed: e.data[3] });
   }
   postMessage([e.data[0], e.data[1], mesh.toJSON()]);
 });

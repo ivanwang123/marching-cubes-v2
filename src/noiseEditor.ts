@@ -1,5 +1,3 @@
-import "./style.css";
-
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { generateChunk } from "./chunkGenerator";
@@ -11,7 +9,7 @@ import { getChunkKey, getSeed } from "./utils";
 
 /* ============ SETUP ============ */
 
-const MAP_SIZE = 2;
+const MAP_SIZE = 1;
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({

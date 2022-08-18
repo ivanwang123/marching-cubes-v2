@@ -20,8 +20,8 @@ interface FromNoiseMap {
   seed?: never;
 }
 interface FromLayersAndSeed {
-  noiseLayers: NoiseLayers | null;
-  seed: Seed | null;
+  noiseLayers?: NoiseLayers | null;
+  seed?: Seed | null;
   noiseMap?: never;
 }
 export type Generate = FromNoiseMap | FromLayersAndSeed;

@@ -1,14 +1,13 @@
-import "./style.css";
-
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import Worker from "web-worker";
 import { generateChunk } from "./chunkGenerator";
-import { CHUNK_HEIGHT, CHUNK_SIZE, storageKeys } from "./constants";
+import { CHUNK_SIZE, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { editNoiseMapChunks } from "./noiseMapEditor";
-import { LoadedChunks, NoiseLayers, NoiseMap } from "./types";
+import { LoadedChunks, NoiseLayers } from "./types";
 import { getChunkKey, getSeed } from "./utils";
+import Worker from "web-worker";
+import Stats from "stats.js";
 
 /* ============ SETUP ============ */
 
@@ -37,31 +36,34 @@ const scene = new THREE.Scene();
 const ambientLight = new THREE.AmbientLight(0x404040, 1);
 scene.add(ambientLight);
 
-// Axes helper
-const axesHelper = new THREE.AxesHelper(5);
-axesHelper.setColors(
-  new THREE.Color(0xff0000),
-  new THREE.Color(0x00ff00),
-  new THREE.Color(0x0000ff)
-);
-axesHelper.position.y = 30;
-scene.add(axesHelper);
-
-const geometry = new THREE.BoxGeometry(30, 30, 30);
-const material = new THREE.MeshBasicMaterial({
-  color: 0x00ff00ff,
-  wireframe: true,
-});
-const cube = new THREE.Mesh(geometry, material);
-cube.position.y = 15;
-scene.add(cube);
+// Stats
+const stats = new Stats();
+stats.showPanel(0);
+stats.dom.style.left = "";
+stats.dom.style.right = "0";
+document.body.appendChild(stats.dom);
 
 /* ============ CONTROLS ============ */
+
+const modal = document.getElementById("modal");
+const topBar = document.getElementById("top-bar");
 
 new PointerLockControls(camera, document.body);
 
 window.addEventListener("click", () => {
   document.body.requestPointerLock();
+});
+
+document.addEventListener("pointerlockchange", () => {
+  if (modal) {
+    if (document.pointerLockElement === document.body) {
+      modal.style.display = "none";
+      if (topBar) topBar.style.display = "flex";
+    } else {
+      modal.style.display = "grid";
+      if (topBar) topBar.style.display = "none";
+    }
+  }
 });
 
 /* ============ GENERATE WORLD ============ */
@@ -70,7 +72,6 @@ let seed = getSeed();
 
 let loadedChunks: LoadedChunks = {};
 
-let noiseMapStr = sessionStorage.getItem(storageKeys.NOISE_MAP);
 let noiseLayersStr = sessionStorage.getItem(storageKeys.NOISE_LAYERS);
 let noiseLayers = noiseLayersStr
   ? (noiseLayersStr.split(",").map((layer) => parseInt(layer)) as NoiseLayers)
@@ -78,40 +79,14 @@ let noiseLayers = noiseLayersStr
 
 for (let x = -1; x < 2; x++) {
   for (let z = -1; z < 2; z++) {
-    if (x === 0 && z === 0 && noiseMapStr) {
-      const noiseMap: NoiseMap = [];
-      const noiseValues = noiseMapStr.split(",");
-
-      const mapSize = CHUNK_SIZE + 1;
-      const mapHeight = CHUNK_HEIGHT + 1;
-      for (let y = 0; y < mapHeight; y++) {
-        let plane = [];
-        for (let z = 0; z < mapSize; z++) {
-          const buffer = new ArrayBuffer(mapSize * 4);
-          const line = new Float32Array(buffer);
-          for (let x = 0; x < mapSize; x++) {
-            line[x] = parseFloat(
-              noiseValues[y * mapSize * mapSize + z * mapSize + x]
-            );
-          }
-          plane.push(line);
-        }
-        noiseMap.push(plane);
-      }
-      let mesh = generateChunk(0, 0, 0, { noiseMap });
-
-      scene.add(mesh);
-      loadedChunks[getChunkKey(0, 0)] = { mesh, noiseMap };
+    let mesh = null;
+    if (noiseLayers) {
+      mesh = generateChunk(x, 0, z, { noiseLayers, seed });
     } else {
-      let mesh = null;
-      if (noiseLayers) {
-        mesh = generateChunk(x, 0, z, { noiseLayers, seed });
-      } else {
-        mesh = generateChunk(x, 0, z);
-      }
-      scene.add(mesh);
-      loadedChunks[getChunkKey(x, z)] = { mesh, noiseMap: null };
+      mesh = generateChunk(x, 0, z, { seed });
     }
+    scene.add(mesh);
+    loadedChunks[getChunkKey(x, z)] = { mesh, noiseMap: null };
   }
 }
 
@@ -235,7 +210,6 @@ function move() {
 /* ============ EDIT TERRAIN ============ */
 
 const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
 
 const mouse = [false, false];
 
@@ -267,12 +241,15 @@ function editTerrain() {
 /* ============ ANIMATION ============ */
 
 function animation(_time: number) {
+  stats.begin();
+
   camera.getWorldDirection(cameraDir);
-  raycaster.setFromCamera(pointer, camera);
+  raycaster.set(camera.position, cameraDir);
 
   move();
   editTerrain();
 
+  stats.end();
   renderer.render(scene, camera);
 }
 
@@ -298,11 +275,6 @@ window.addEventListener("mousedown", (e) => {
       mouse[1] = true;
       break;
   }
-});
-
-window.addEventListener("pointermove", (e) => {
-  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });
 
 /* ============ KEY LISTENERS ============ */
