@@ -11,7 +11,8 @@ import { getChunkKey, getSeed } from "./utils";
 
 const MAP_SIZE = 1;
 
-let interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
+let interpolateStr = sessionStorage.getItem(storageKeys.INTERPOLATE);
+let interpolate = interpolateStr === null ? true : interpolateStr === "true";
 let wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
 
 /* ============ SETUP ============ */

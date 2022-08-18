@@ -7,7 +7,6 @@ import { Generate } from "./types";
 
 const SURFACE_LEVEL = 0;
 
-// TODO: Rename to generateMesh
 export function generateMesh(
   chunkX: number,
   chunkY: number,
