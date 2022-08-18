@@ -10,16 +10,12 @@
     "tailwind": "npx tailwindcss -i ./styles/styles.css -o ./styles/tailwind.css --watch"
   },
   "devDependencies": {
-    "@types/debounce": "^1.2.1",
-    "@types/paralleljs": "^0.0.21",
     "@types/three": "^0.143.0",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.6.4",
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "debounce": "^1.2.1",
-    "paralleljs": "^1.1.0",
     "simplex-noise": "^4.0.0",
     "stats.js": "^0.17.0",
     "three": "^0.143.0",

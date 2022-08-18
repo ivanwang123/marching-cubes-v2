@@ -9,15 +9,9 @@
 - [DONE] adjustable smoothness
 - [DONE] toggle wireframe
 - [DONE] improve user collision
+- [DONE] skybox
 - [REMOVED] editable terrain
-- skybox
+- favicon
 - add flight
 - toggle noise map points
 - cave option
-
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_ft.png"
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_bk.png"
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_up.png"
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_dn.png"
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_rt.png"
-"https://raw.githubusercontent.com/codypearce/some-skyboxes/master/skyboxes/purplenebula/purplenebula_lf.png"

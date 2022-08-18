@@ -49,12 +49,12 @@ document.body.appendChild(stats.dom);
 /* ============ SKYBOX ============ */
 
 const skyboxPaths = [
-  "public/skybox/front.png",
-  "public/skybox/back.png",
-  "public/skybox/top.png",
-  "public/skybox/bottom.png",
-  "public/skybox/left.png",
-  "public/skybox/right.png",
+  "skybox/front.png",
+  "skybox/back.png",
+  "skybox/top.png",
+  "skybox/bottom.png",
+  "skybox/left.png",
+  "skybox/right.png",
 ];
 
 const materialArray = skyboxPaths.map((path) => {

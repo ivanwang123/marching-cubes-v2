@@ -1,11 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@types/debounce': ^1.2.1
-  '@types/paralleljs': ^0.0.21
   '@types/three': ^0.143.0
-  debounce: ^1.2.1
-  paralleljs: ^1.1.0
   simplex-noise: ^4.0.0
   stats.js: ^0.17.0
   tailwindcss: ^3.1.8
@@ -16,8 +12,6 @@ specifiers:
   web-worker: ^1.2.0
 
 dependencies:
-  debounce: 1.2.1
-  paralleljs: 1.1.0
   simplex-noise: 4.0.0
   stats.js: 0.17.0
   three: 0.143.0
@@ -25,8 +19,6 @@ dependencies:
   web-worker: 1.2.0
 
 devDependencies:
-  '@types/debounce': 1.2.1
-  '@types/paralleljs': 0.0.21
   '@types/three': 0.143.0
   tailwindcss: 3.1.8
   typescript: 4.7.4
@@ -62,14 +54,6 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
-    dev: true
-
-  /@types/debounce/1.2.1:
-    resolution: {integrity: sha512-epMsEE85fi4lfmJUH/89/iV/LI+F5CvNIvmgs5g5jYFPfhO2S/ae8WSsLOKWdwtoaZw9Q2IhJ4tQ5tFCcS/4HA==}
-    dev: true
-
-  /@types/paralleljs/0.0.21:
-    resolution: {integrity: sha512-6DA//BIBHnUAgkwkqhvBfIQqHtHk8z68NiNt5oMlMrnC6lC2hq4lU2lJGD3pA8FdOf2Aj/XmwhuqZIvGdIbBrw==}
     dev: true
 
   /@types/three/0.143.0:
@@ -154,10 +138,6 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
-
-  /debounce/1.2.1:
-    resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
-    dev: false
 
   /defined/1.0.0:
     resolution: {integrity: sha512-Y2caI5+ZwS5c3RiNDJ6u53VhQHv+hHKwhkI1iHvceKUHw9Df6EK2zRLfjejRgMuCuxK7PfSWIMwWecceVvThjQ==}
@@ -514,11 +494,6 @@ packages:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
     engines: {node: '>= 6'}
     dev: true
-
-  /paralleljs/1.1.0:
-    resolution: {integrity: sha512-5sYLAEzM+qMDYzQeVWyNdqINU4h+/Fhr0CrZs3+HCYPIhOWuA2BCzn74js2qzX+LKFwRQR6sSJBZhgT+WWhbfw==}
-    engines: {node: '>=10'}
-    dev: false
 
   /path-parse/1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
