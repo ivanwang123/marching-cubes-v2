@@ -42,6 +42,8 @@ noiseValue =
 - Button to generate random seed
 - Toggle interpolation and wireframe view
 
+---
+
 ### First person mode
 
 <img src="screenshots/first-person-video.gif" width="100%" alt="First person video" />
@@ -57,6 +59,8 @@ noiseValue =
 - `W`,`A`,`S`,`D` or `Arrow Keys` to move
 - `Space` to jump
 - `Mouse` to look around
+
+---
 
 ### Terrain editor
 
