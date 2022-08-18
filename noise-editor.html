@@ -27,9 +27,13 @@
     <div
       class="absolute top-10 right-10 flex flex-col border border-white bg-black bg-opacity-90 text-white p-8 z-50"
     >
-      <h3 class="font-bold mb-4">NOISE LAYERS</h3>
+      <h3 class="font-bold mb-4">NOISE FREQUENCIES</h3>
       <div class="grid grid-cols-2-auto gap-x-4 gap-y-2">
-        <label for="noise-slider-one">Layer One</label>
+        <div class="col-start-2 flex justify-between text-sm -mb-2">
+          <p>High</p>
+          <p>Low</p>
+        </div>
+        <label for="noise-slider-one">Layer 1</label>
         <input
           type="range"
           id="noise-slider-one"
@@ -37,9 +41,9 @@
           max="100"
           value="50"
         />
-        <label for="noise-slider-two">Layer Two</label>
+        <label for="noise-slider-two">Layer 2</label>
         <input type="range" id="noise-slider-two" min="5" max="75" value="25" />
-        <label for="noise-slider-three">Layer Three</label>
+        <label for="noise-slider-three">Layer 3</label>
         <input
           type="range"
           id="noise-slider-three"

@@ -658,6 +658,10 @@ video {
   margin-bottom: 3rem;
 }
 
+.-mb-2{
+  margin-bottom: -0.5rem;
+}
+
 .flex{
   display: flex;
 }
@@ -716,6 +720,10 @@ video {
 
 .justify-center{
   justify-content: center;
+}
+
+.justify-between{
+  justify-content: space-between;
 }
 
 .gap-4{
