@@ -2,7 +2,7 @@ export type NoiseMap = Float32Array[][];
 
 export type LoadedChunks = {
   [key: string]: {
-    mesh: THREE.Object3D | null;
+    mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshNormalMaterial> | null;
     noiseMap: NoiseMap | null;
   };
 };

@@ -7,9 +7,14 @@ import { generateNoiseMap } from "./noiseMapGenerator";
 import { LoadedChunks, NoiseLayers } from "./types";
 import { getChunkKey, getSeed } from "./utils";
 
-/* ============ SETUP ============ */
+/* ============ VARIABLES ============ */
 
 const MAP_SIZE = 1;
+
+let interpolate = true;
+let wireframe = false;
+
+/* ============ SETUP ============ */
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -49,7 +54,7 @@ axesHelper.setColors(
 );
 scene.add(axesHelper);
 
-/* ============ CONTROls ============ */
+/* ============ CONTROLS ============ */
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target = new THREE.Vector3(0, 10, 0);
@@ -99,7 +104,7 @@ function generateMap() {
         disposeNode(scene, oldMesh);
       }
 
-      const mesh = generateChunk(x, 0, z, { noiseMap });
+      const mesh = generateChunk(x, 0, z, { noiseMap }, interpolate, wireframe);
       loadedChunks[getChunkKey(x, z)].mesh = mesh;
       scene.add(mesh);
     }
@@ -107,6 +112,23 @@ function generateMap() {
 }
 
 generateMap();
+
+/* ============ OPTION TOGGLES ============ */
+
+const interpolationToggle = document.getElementById("interpolation-toggle");
+const wireframeToggle = document.getElementById("wireframe-toggle");
+
+interpolationToggle?.addEventListener("click", (e) => {
+  interpolate = (e.target as HTMLInputElement).checked;
+  generateMap();
+});
+
+wireframeToggle?.addEventListener("click", (e) => {
+  wireframe = (e.target as HTMLInputElement).checked;
+  Object.values(loadedChunks).forEach((chunk) => {
+    if (chunk.mesh) chunk.mesh.material.wireframe = wireframe;
+  });
+});
 
 /* ============ NOISE SLIDERS ============ */
 

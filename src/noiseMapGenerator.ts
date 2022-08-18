@@ -50,12 +50,17 @@ export function generateNoiseMap(
       while (x <= CHUNK_SIZE) {
         // Add offset to create a ground level
         let noiseOffset = 0;
-        if (y < 10) {
+        if (y === 0) {
+          noiseOffset = -2;
+        } else if (y === CHUNK_HEIGHT) {
+          noiseOffset = 2;
+        } else if (y < 10) {
           noiseOffset = 0.002 * Math.pow(y - 10, 3);
           // } else if (y > CHUNK_HEIGHT - 10) {
           //   noiseOffset = -0.002 * Math.pow(y - (CHUNK_HEIGHT - 10), 3);
         } else {
-          noiseOffset = (2 * (y - 10)) / (CHUNK_HEIGHT - 10);
+          noiseOffset = (y - 10) / 20;
+          // noiseOffset = 0.002 * Math.pow(y - 20, 3);
         }
 
         const noiseOne = noiseLayerChanged[0]

@@ -101,7 +101,10 @@ for (let w = 0; w < NUM_WORKERS; w++) {
   });
 
   worker.addEventListener("message", (e) => {
-    let mesh = new THREE.ObjectLoader().parse(e.data[2]);
+    let mesh = new THREE.ObjectLoader().parse(e.data[2]) as THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.MeshNormalMaterial
+    >;
     scene.add(mesh);
     loadedChunks[getChunkKey(e.data[0], e.data[1])] = { mesh, noiseMap: null };
   });
