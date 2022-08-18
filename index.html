@@ -6,8 +6,40 @@
     <link href="/styles/tailwind.css" rel="stylesheet" />
     <title>Marching Cubes</title>
   </head>
-  <body>
+  <body class="overflow-y-auto">
+    <div id="canvas-container" class="relative w-full h-full">
+      <div
+        class="absolute inset-0 flex flex-col items-center justify-center z-50"
+      >
+        <h1 class="drop-shadow-lg text-black text-9xl opacity-90">MARCHING</h1>
+        <h1 class="drop-shadow-lg text-white text-9xl opacity-90">CUBES</h1>
+        <a
+          class="flex items-center bg-black text-white font-bold px-4 py-2 opacity-80 mt-20 rounded"
+          href="noise-editor.html"
+        >
+          GO TO EDITOR
+          <svg
+            class="w-5 h-5 fill-current ml-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path
+              d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="grid grid-cols-mid-auto gap-4 pb-16">
+      <main class="col-start-2 w-full text-white">
+        <h2 class="text-3xl font-bold mb-4 mt-8">VIDEO DEMO</h2>
+        <div class="bg-white aspect-video w-96"></div>
+        <h2 class="text-3xl font-bold mb-4 mt-8">HOW TO PLAY</h2>
+        <h2 class="text-3xl font-bold mb-4 mt-8">WHAT IS MARCHING CUBES?</h2>
+      </main>
+    </div>
     <canvas id="app"></canvas>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/home.ts"></script>
   </body>
 </html>

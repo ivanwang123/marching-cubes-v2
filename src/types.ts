@@ -11,6 +11,7 @@ export type NoiseMapCache = {
   [key: string]: {
     noiseMap: number[][][][];
     noiseLayers: number[];
+    seed: number;
   };
 };
 
@@ -29,3 +30,14 @@ export type Generate = FromNoiseMap | FromLayersAndSeed;
 export type NoiseLayers = [number, number, number];
 export type Seed = number;
 export type LayersAndSeed = [NoiseLayers, Seed];
+
+export type WorkerMessage = [
+  x: number,
+  z: number,
+  noiseLayers: NoiseLayers | null,
+  seed: number,
+  interpolate: boolean,
+  wireframe: boolean
+];
+
+export type WorkerReturnMessage = [x: number, z: number, meshJson: any];

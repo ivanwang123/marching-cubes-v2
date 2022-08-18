@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { generateChunk } from "./chunkGenerator";
-import { CHUNK_SIZE, storageKeys } from "./constants";
+import { generateMesh } from "./meshGenerator";
+import { DEFAULT_NOISE_LAYERS, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { generateNoiseMap } from "./noiseMapGenerator";
 import { LoadedChunks, NoiseLayers } from "./types";
@@ -11,8 +11,8 @@ import { getChunkKey, getSeed } from "./utils";
 
 const MAP_SIZE = 1;
 
-let interpolate = true;
-let wireframe = false;
+let interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
+let wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
 
 /* ============ SETUP ============ */
 
@@ -32,9 +32,9 @@ const camera = new THREE.PerspectiveCamera(
   1,
   1000
 );
-camera.position.y = MAP_SIZE * CHUNK_SIZE * 2;
-camera.position.z = MAP_SIZE * CHUNK_SIZE;
-camera.position.x = MAP_SIZE * CHUNK_SIZE;
+camera.position.y = 90;
+camera.position.z = 45;
+camera.position.x = 45;
 
 // Scene
 const scene = new THREE.Scene();
@@ -104,7 +104,7 @@ function generateMap() {
         disposeNode(scene, oldMesh);
       }
 
-      const mesh = generateChunk(x, 0, z, { noiseMap }, interpolate, wireframe);
+      const mesh = generateMesh(x, 0, z, { noiseMap }, interpolate, wireframe);
       loadedChunks[getChunkKey(x, z)].mesh = mesh;
       scene.add(mesh);
     }
@@ -113,18 +113,48 @@ function generateMap() {
 
 generateMap();
 
-/* ============ OPTION TOGGLES ============ */
+/* ============ SEED ============ */
 
-const interpolationToggle = document.getElementById("interpolation-toggle");
-const wireframeToggle = document.getElementById("wireframe-toggle");
+const currentSeed = document.getElementById(
+  "current-seed"
+) as HTMLParagraphElement;
+const changeSeedBtn = document.getElementById("change-seed-btn");
 
-interpolationToggle?.addEventListener("click", (e) => {
-  interpolate = (e.target as HTMLInputElement).checked;
+currentSeed.textContent = seed.toFixed(7).toString();
+
+changeSeedBtn?.addEventListener("click", () => {
+  seed = Math.random();
+  currentSeed.textContent = seed.toFixed(7).toString();
   generateMap();
 });
 
-wireframeToggle?.addEventListener("click", (e) => {
+/* ============ OPTION TOGGLES ============ */
+
+const interpolationToggle = document.getElementById(
+  "interpolation-toggle"
+) as HTMLInputElement;
+const wireframeToggle = document.getElementById(
+  "wireframe-toggle"
+) as HTMLInputElement;
+
+interpolationToggle.checked = interpolate;
+wireframeToggle.checked = wireframe;
+
+interpolationToggle.addEventListener("click", (e) => {
+  interpolate = (e.target as HTMLInputElement).checked;
+  sessionStorage.setItem(
+    storageKeys.INTERPOLATE,
+    new Boolean(interpolate).toString()
+  );
+  generateMap();
+});
+
+wireframeToggle.addEventListener("click", (e) => {
   wireframe = (e.target as HTMLInputElement).checked;
+  sessionStorage.setItem(
+    storageKeys.WIREFRAME,
+    new Boolean(wireframe).toString()
+  );
   Object.values(loadedChunks).forEach((chunk) => {
     if (chunk.mesh) chunk.mesh.material.wireframe = wireframe;
   });
@@ -141,6 +171,7 @@ const noiseSliderTwo = document.getElementById(
 const noiseSliderThree = document.getElementById(
   "noise-slider-three"
 ) as HTMLInputElement;
+const resetNoiseBtn = document.getElementById("reset-noise-btn");
 
 noiseSliderOne.value = noiseLayers[0].toString();
 noiseSliderTwo.value = noiseLayers[1].toString();
@@ -158,6 +189,14 @@ noiseSliderTwo.addEventListener("input", (e: any) => {
 
 noiseSliderThree.addEventListener("input", (e: any) => {
   noiseLayers[2] = parseInt(e.target.value);
+  generateMap();
+});
+
+resetNoiseBtn?.addEventListener("click", () => {
+  noiseLayers = [...DEFAULT_NOISE_LAYERS];
+  noiseSliderOne.value = noiseLayers[0].toString();
+  noiseSliderTwo.value = noiseLayers[1].toString();
+  noiseSliderThree.value = noiseLayers[2].toString();
   generateMap();
 });
 

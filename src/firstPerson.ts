@@ -1,13 +1,18 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { generateChunk } from "./chunkGenerator";
+import { generateMesh } from "./meshGenerator";
 import { CHUNK_SIZE, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { editNoiseMapChunks } from "./noiseMapEditor";
-import { LoadedChunks, NoiseLayers } from "./types";
+import { LoadedChunks, NoiseLayers, WorkerReturnMessage } from "./types";
 import { getChunkKey, getSeed } from "./utils";
 import Worker from "web-worker";
 import Stats from "stats.js";
+
+/* ============ VARIABLES ============ */
+
+const interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
+const wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
 
 /* ============ SETUP ============ */
 
@@ -81,9 +86,9 @@ for (let x = -1; x < 2; x++) {
   for (let z = -1; z < 2; z++) {
     let mesh = null;
     if (noiseLayers) {
-      mesh = generateChunk(x, 0, z, { noiseLayers, seed });
+      mesh = generateMesh(x, 0, z, { noiseLayers, seed });
     } else {
-      mesh = generateChunk(x, 0, z, { seed });
+      mesh = generateMesh(x, 0, z, { seed });
     }
     scene.add(mesh);
     loadedChunks[getChunkKey(x, z)] = { mesh, noiseMap: null };
@@ -100,13 +105,16 @@ for (let w = 0; w < NUM_WORKERS; w++) {
     type: "module",
   });
 
-  worker.addEventListener("message", (e) => {
+  worker.addEventListener("message", (e: MessageEvent<WorkerReturnMessage>) => {
     let mesh = new THREE.ObjectLoader().parse(e.data[2]) as THREE.Mesh<
       THREE.BufferGeometry,
       THREE.MeshNormalMaterial
     >;
     scene.add(mesh);
-    loadedChunks[getChunkKey(e.data[0], e.data[1])] = { mesh, noiseMap: null };
+    loadedChunks[getChunkKey(e.data[0], e.data[1])] = {
+      mesh,
+      noiseMap: null,
+    };
   });
 
   workerPool.push(worker);
@@ -203,7 +211,14 @@ function move() {
       let chunkKey = getChunkKey(x, z);
       if (!(chunkKey in loadedChunks)) {
         loadedChunks[chunkKey] = { mesh: null, noiseMap: null };
-        workerPool[workerIndex].postMessage([x, z, noiseLayers, seed]);
+        workerPool[workerIndex].postMessage([
+          x,
+          z,
+          noiseLayers,
+          seed,
+          interpolate,
+          wireframe,
+        ]);
         workerIndex = (workerIndex + 1) % NUM_WORKERS;
       }
     }
@@ -232,7 +247,7 @@ function editTerrain() {
         const { mesh: oldMesh, noiseMap } = loadedChunks[chunkKey];
 
         disposeNode(scene, oldMesh);
-        const mesh = generateChunk(chunk[0], 0, chunk[1], { noiseMap });
+        const mesh = generateMesh(chunk[0], 0, chunk[1], { noiseMap });
         loadedChunks[chunkKey].mesh = mesh;
 
         scene.add(mesh);

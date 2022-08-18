@@ -14,7 +14,8 @@ export function generateNoiseMap(
   seed?: Seed | null,
   cacheNoiseMap: boolean = false
 ): NoiseMap {
-  const noise = createNoise3D(() => seed || Math.random());
+  const currentSeed = seed || Math.random();
+  const noise = createNoise3D(() => currentSeed);
 
   const noiseMap: NoiseMap = [];
   if (!noiseLayers) noiseLayers = DEFAULT_NOISE_LAYERS;
@@ -24,12 +25,19 @@ export function generateNoiseMap(
   const chunkKey = getChunkKey(chunkX, chunkZ);
   let initialCache = cacheNoiseMap && !(chunkKey in noiseMapCache);
   if (initialCache)
-    noiseMapCache[chunkKey] = { noiseMap: [], noiseLayers: [0, 0, 0] };
+    noiseMapCache[chunkKey] = {
+      noiseMap: [],
+      noiseLayers: [0, 0, 0],
+      seed: currentSeed,
+    };
 
   // Cache noise layers
   if (cacheNoiseMap) {
     for (let i = 0; i < noiseLayers.length; i++) {
-      if (noiseLayers[i] === noiseMapCache[chunkKey].noiseLayers[i]) {
+      if (
+        noiseLayers[i] === noiseMapCache[chunkKey].noiseLayers[i] &&
+        currentSeed === noiseMapCache[chunkKey].seed
+      ) {
         noiseLayerChanged[i] = false;
       } else {
         noiseMapCache[chunkKey].noiseLayers[i] = noiseLayers[i];
@@ -57,10 +65,9 @@ export function generateNoiseMap(
         } else if (y < 10) {
           noiseOffset = 0.002 * Math.pow(y - 10, 3);
           // } else if (y > CHUNK_HEIGHT - 10) {
-          //   noiseOffset = -0.002 * Math.pow(y - (CHUNK_HEIGHT - 10), 3);
+          //   noiseOffset = 0.002 * Math.pow(y - (CHUNK_HEIGHT - 10), 3);
         } else {
           noiseOffset = (y - 10) / 20;
-          // noiseOffset = 0.002 * Math.pow(y - 20, 3);
         }
 
         const noiseOne = noiseLayerChanged[0]

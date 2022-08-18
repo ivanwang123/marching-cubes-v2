@@ -25,7 +25,7 @@
       Go home
     </a>
     <div
-      class="absolute top-10 right-10 flex flex-col border border-white bg-black text-white p-8 z-50"
+      class="absolute top-10 right-10 flex flex-col border border-white bg-black bg-opacity-90 text-white p-8 z-50"
     >
       <h3 class="font-bold mb-4">NOISE LAYERS</h3>
       <div class="grid grid-cols-2-auto gap-x-4 gap-y-2">
@@ -51,7 +51,7 @@
       <button
         type="button"
         class="px-4 py-0.5 border border-white mt-6 mr-auto transition hover:bg-neutral-800"
-        id="reset-btn"
+        id="reset-noise-btn"
       >
         Reset Layers
       </button>
@@ -61,12 +61,12 @@
       <h3 class="font-bold mb-4">SEED</h3>
       <div class="flex">
         <p class="mr-1">Current seed</p>
-        <p class="ml-auto font-bold">0.1248811</p>
+        <p id="current-seed" class="ml-auto font-bold">0</p>
       </div>
       <button
         type="button"
         class="px-4 py-1 border border-white mt-6 mr-auto transition hover:bg-neutral-800"
-        id="reset-btn"
+        id="change-seed-btn"
       >
         Change seed
       </button>

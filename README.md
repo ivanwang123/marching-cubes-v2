@@ -1,14 +1,15 @@
 # TODO
 
-- [STYLE] adjustable noise
+- [ADD] landing page
 - [STYLE] first person mode
+- [DONE] adjustable noise
 - [DONE] infinite generation
 - [DONE] save state between steps
 - [DONE] editable terrain in first person mode
+- [DONE] adjustable smoothness
+- [DONE] toggle wireframe
 - [REMOVED] editable terrain
-- adjustable smoothness
-- show cubes toggle/wireframe
-- show step by step cube creation
+- skybox
+- toggle noise map points
 - cave option
 - improve user collision
-- landing page

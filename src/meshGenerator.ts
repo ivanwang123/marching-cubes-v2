@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
-import { CHUNK_HEIGHT, CHUNK_SIZE } from "./constants";
+import { CHUNK_HEIGHT, CHUNK_SIZE, storageKeys } from "./constants";
 import { generateNoiseMap } from "./noiseMapGenerator";
 import { edgeCorners, edges, table } from "./triangulation";
 import { Generate } from "./types";
@@ -8,13 +8,13 @@ import { Generate } from "./types";
 const SURFACE_LEVEL = 0;
 
 // TODO: Rename to generateMesh
-export function generateChunk(
+export function generateMesh(
   chunkX: number,
   chunkY: number,
   chunkZ: number,
   generate?: Generate | null,
-  interpolate: boolean = true,
-  wireframe: boolean = false
+  interpolate?: boolean,
+  wireframe?: boolean
 ) {
   let geoms = [];
 
@@ -32,6 +32,11 @@ export function generateChunk(
       noiseMap = generateNoiseMap(chunkX, chunkY, chunkZ, null, generate?.seed);
     }
   }
+
+  if (interpolate === undefined)
+    interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
+  if (wireframe === undefined)
+    wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
 
   // Create cube based on noise map
   let cubeCounter = 0;
