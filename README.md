@@ -1,12 +1,8 @@
-<center style="font-weight: bold; font-size: 32px">
-Marching Cubes
-</center>
+![Landing page](screenshots/landing-page-rotated.png)
 
 <center style="font-style: italic">
    A 3D terrain generator
 </center>
-
-![Landing page](screenshots/landing-page-rotated.png)
 
 ## Table of Contents
 
@@ -24,26 +20,59 @@ Marching Cubes
 
 ### Noise editor
 
-![Noise editor page](screenshots/noise-editor-page.png)
+![Noise editor page](screenshots/noise-editor-video.gif)
 
-- Sliders to adjust noise level of the terrain
-- Button to generate random seeds
+<center>
+  <i>
+    Adjustable noise for varied terrain options
+  </i>
+</center>
+
+<br/>
+
+Uses three layers of noise values at different frequencies and strengths in order to create a more detailed landscape
+
+```js
+noiseValue =
+  1 * noise(x / frequency1, y / frequency1, z / frequency1) +
+  0.5 * noise(x / frequency2, y / frequency2, z / frequency2) +
+  0.25 * noise(x / frequency3, y / frequency3, z / frequency3);
+```
+
+**Options**
+
+- Sliders to adjust noise frequencies
+- Button to generate random seed
 - Toggle interpolation and wireframe view
 
 ### First person mode
 
-![First person page](screenshots/first-person-page.png)
+![First person page](screenshots/first-person-video.gif)
 
-- View the terrain in first person
+<center>
+  <i>
+    Explore the terrain in first person
+  </i>
+</center>
+
+**Controls**
+
 - `W`,`A`,`S`,`D` or `Arrow Keys` to move
 - `Space` to jump
 - `Mouse` to look around
 
 ### Terrain editor
 
-![Edit terrain](screenshots/edit-terrain.png)
+![Edit terrain](screenshots/edit-terrain-video.gif)
 
-- Deform the terrain in real time
+<center>
+  <i>
+    Deformable terrain in real time
+  </i>
+</center>
+
+**Controls**
+
 - `Left Click` to add terrain
 - `Right Click` to remove terrain
 
@@ -57,7 +86,7 @@ npm install
 npm run dev
 ```
 
-Run tailwind to edit the CSS
+Run tailwind to edit the CSS and styling
 
 ```sh
 npm run tailwind
@@ -65,59 +94,48 @@ npm run tailwind
 
 ## Technology
 
-- [Three.js] - Markdown parser done right. Fast and easy to extend.
-- [Typescript] - awesome web-based text editor
-- [TailwindCSS] - evented I/O for the backend
-- [Vite] - HTML enhanced for web apps!
+- [Three.js] - Library for creating 3D graphics in a web browser
+- [Typescript] - Superset of Javascript with strong static typing
+- [TailwindCSS] - CSS framework for rapid styling
+- [Vite] - Frontend build tool for quicker development
 
 ## Algorithm
 
+Marching cubes is an algorithm used for generating 3D terrain. It works by sampling the corner points of a cube using a function that takes in a point and returns a single value.
+
+If the value is below a certain "surface-level" threshold, it is considered empty space. However, if the value is above the surface-level value then it is considered to be inside the surface, or underground.
+
+After doing this for each corner of the cube, we get a list of above-ground and underground points, and the goal is to construct a surface to surround the underground points.
+
+Repeat this for each cube in a chunk and the result is a terrain-like shape.
+
+![Marching cubes algorithm](screenshots/marching-cubes-algorithm.png)
+
+<center>
+  <i>
+    Bolded corners are underground and a surface is created to enclose the corner
+  </i>
+</center>
+
 ## Optimizations
 
-| Optimization   |     |
-| -------------- | --- |
-| BufferGeometry |     |
-| Layer Caching  |     |
-| Simplex Noise  |     |
-| Web Workers    |     |
+From taking seconds just to render a few chunks, to an infinite chunk generator with deformable terrain, here are some of the optimizations that made it all possible.
+
+| Optimization   | Result                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BufferGeometry | Buffer geometries are a feature in Three.js that store geometry data in buffers representing parallel arrays. This reduces the amount of memory and time used to store and transform the data.                                                                                                                                                                                                                                                      |
+| Noise Caching  | On the noise editor page, sliding the frequency sliders requires recomputing the noise map multiple times per second. To reduce the number of computations required, noise values are cached so that only the layer that changes will get recomputed and added on to the cached values.                                                                                                                                                             |
+| Simplex Noise  | Simplex noise is an improved version of Perlin noise. It requires less calculations, scales better to higher dimensions, and reduces directional artifacts. It has a complexity of $O(n^2)$ as opposed to Perlin noise's $O(n2^n)$ where $n$ is the number of dimensions.                                                                                                                                                                           |
+| Web Workers    | While Javascript is a single-threaded language, web workers make it possible to create multithreaded applications by running scripts in background threads. They are used in the first person mode to calculate the noise maps and meshes of new chunks in parallel, allowing the main thread to focus on rendering and handling input. This significantly improves the framerate and prevents the window from freezing up when loading new chunks. |
 
 ## Acknowledgements
 
-Inspired by Sebastian Lague's Youtube video
+Inspired by Sebastian Lague's [Coding Adventure: Marching Cubes](https://www.youtube.com/watch?v=M3iI2l0ltbE&ab_channel=SebastianLague)
+<br/>
+Improved version of [marching-cubes](https://github.com/ivanwang123/marching-cubes) ([site](https://marching-cubes.vercel.app))
 
 [//]: #
-[dill]: https://github.com/joemccann/dillinger
-[git-repo-url]: https://github.com/joemccann/dillinger.git
-[john gruber]: http://daringfireball.net
-[df1]: http://daringfireball.net/projects/markdown/
-[markdown-it]: https://github.com/markdown-it/markdown-it
-[ace editor]: http://ace.ajax.org
-[node.js]: http://nodejs.org
-[twitter bootstrap]: http://twitter.github.com/bootstrap/
-[jquery]: http://jquery.com
-[@tjholowaychuk]: http://twitter.com/tjholowaychuk
-[express]: http://expressjs.com
-[angularjs]: http://angularjs.org
-[gulp]: http://gulpjs.com
-[pldb]: https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md
-[plgh]: https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md
-[plgd]: https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md
-[plod]: https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md
-[plme]: https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md
-[plga]: https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md
-
-- [ADD] landing page
-- [STYLE] first person mode
-- [DONE] adjustable noise
-- [DONE] infinite generation
-- [DONE] save state between steps
-- [DONE] editable terrain in first person mode
-- [DONE] adjustable smoothness
-- [DONE] toggle wireframe
-- [DONE] improve user collision
-- [DONE] skybox
-- [REMOVED] editable terrain
-- favicon
-- add flight
-- toggle noise map points
-- cave option
+[three.js]: https://threejs.org
+[typescript]: https://www.typescriptlang.org
+[tailwindcss]: https://tailwindcss.com
+[vite]: https://vitejs.dev
