@@ -1,11 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { generateMesh } from "./meshGenerator";
 import { generateNoiseMap } from "./noiseMapGenerator";
 import { LoadedChunks, NoiseLayers } from "./types";
-import { getChunkKey, getSeed } from "./utils";
+import { getChunkKey } from "./utils";
 
 /* ============ SETUP ============ */
 
