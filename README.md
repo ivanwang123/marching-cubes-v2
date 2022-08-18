@@ -8,15 +8,12 @@
 
 ## Table of Contents
 
-- [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
 - [Technology](#technology)
 - [Algorithm](#algorithm)
 - [Optimizations](#optimizations)
 - [Acknowledgements](#acknowledgements)
-
-## Demo
 
 ## Features
 
