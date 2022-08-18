@@ -32,16 +32,12 @@ const camera = new THREE.PerspectiveCamera(
   70,
   window.innerWidth / window.innerHeight,
   1,
-  1000
+  20000
 );
 camera.position.y = 50;
 
 // Scene
 const scene = new THREE.Scene();
-
-// Lighting
-const ambientLight = new THREE.AmbientLight(0x404040, 1);
-scene.add(ambientLight);
 
 // Stats
 const stats = new Stats();
@@ -49,6 +45,28 @@ stats.showPanel(0);
 stats.dom.style.left = "";
 stats.dom.style.right = "0";
 document.body.appendChild(stats.dom);
+
+/* ============ SKYBOX ============ */
+
+const skyboxPaths = [
+  "public/skybox/front.png",
+  "public/skybox/back.png",
+  "public/skybox/top.png",
+  "public/skybox/bottom.png",
+  "public/skybox/left.png",
+  "public/skybox/right.png",
+];
+
+const materialArray = skyboxPaths.map((path) => {
+  const texture = new THREE.TextureLoader().load(path);
+  return new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide,
+  });
+});
+const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
+const skybox = new THREE.Mesh(skyboxGeom, materialArray);
+scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 

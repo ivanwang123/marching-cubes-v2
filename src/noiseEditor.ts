@@ -31,7 +31,7 @@ const camera = new THREE.PerspectiveCamera(
   70,
   window.innerWidth / window.innerHeight,
   1,
-  1000
+  20000
 );
 camera.position.y = 90;
 camera.position.z = 45;
@@ -40,20 +40,27 @@ camera.position.x = 45;
 // Scene
 const scene = new THREE.Scene();
 
-// Lighting
-const ambientLight = new THREE.AmbientLight(0x404040, 1);
-scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-scene.add(directionalLight);
+/* ============ SKYBOX ============ */
 
-// Axes helper
-const axesHelper = new THREE.AxesHelper(5);
-axesHelper.setColors(
-  new THREE.Color(0xff0000),
-  new THREE.Color(0x00ff00),
-  new THREE.Color(0x0000ff)
-);
-scene.add(axesHelper);
+const skyboxPaths = [
+  "public/skybox/front.png",
+  "public/skybox/back.png",
+  "public/skybox/top.png",
+  "public/skybox/bottom.png",
+  "public/skybox/left.png",
+  "public/skybox/right.png",
+];
+
+const materialArray = skyboxPaths.map((path) => {
+  const texture = new THREE.TextureLoader().load(path);
+  return new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide,
+  });
+});
+const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
+const skybox = new THREE.Mesh(skyboxGeom, materialArray);
+scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
@@ -140,6 +147,14 @@ const wireframeToggle = document.getElementById(
 
 interpolationToggle.checked = interpolate;
 wireframeToggle.checked = wireframe;
+sessionStorage.setItem(
+  storageKeys.INTERPOLATE,
+  new Boolean(interpolate).toString()
+);
+sessionStorage.setItem(
+  storageKeys.WIREFRAME,
+  new Boolean(wireframe).toString()
+);
 
 interpolationToggle.addEventListener("click", (e) => {
   interpolate = (e.target as HTMLInputElement).checked;
