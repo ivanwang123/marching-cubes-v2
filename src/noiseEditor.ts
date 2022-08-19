@@ -72,41 +72,43 @@ controls.update();
 
 const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
 
-const smallEditContainer = document.getElementById("small-edit-container");
-// const configContainer = document.getElementById("config-container");
-// const openConfigBtn = document.getElementById("open-config-btn");
+const configContainer = document.getElementById("config-container");
+const openConfigBtn = document.getElementById("open-config-btn");
+const btnContainer = document.getElementById("btn-container");
 const largeEditContainer = document.getElementById("large-edit-container");
 
 const handleLgMediaQuery = (matches: boolean) => {
-  if (smallEditContainer && largeEditContainer) {
+  if (configContainer && btnContainer && largeEditContainer) {
     if (!matches) {
       // Screen small
-      smallEditContainer.style.display = "grid";
+      configContainer.style.display = "block";
+      btnContainer.style.display = "block";
       largeEditContainer.style.display = "none";
     } else {
       // Screen large
       largeEditContainer.style.display = "block";
-      smallEditContainer.style.display = "none";
+      configContainer.style.display = "none";
+      btnContainer.style.display = "none";
     }
   }
 };
 
 handleLgMediaQuery(lgMediaQuery.matches);
 
-// lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
+lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
 
-// openConfigBtn?.addEventListener("click", () => {
-//   if (configContainer) {
-//     if (
-//       configContainer.style.display === "none" ||
-//       configContainer.style.display === ""
-//     ) {
-//       configContainer.style.display = "block";
-//     } else {
-//       configContainer.style.display = "none";
-//     }
-//   }
-// });
+openConfigBtn?.addEventListener("click", () => {
+  if (configContainer) {
+    if (
+      configContainer.style.display === "none" ||
+      configContainer.style.display === ""
+    ) {
+      configContainer.style.display = "block";
+    } else {
+      configContainer.style.display = "none";
+    }
+  }
+});
 
 /* ============ MESH GENERATOR ============ */
 
