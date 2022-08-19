@@ -115,7 +115,7 @@ let cameraRotationYOffset = 0;
 let cameraMoveX = 0;
 let cameraMoveY = 0;
 
-const radius = 4;
+// const radius = 4;
 
 const onXYControllerLook = (value: THREE.Vector2) => {
   // console.log("LOOK", value);
