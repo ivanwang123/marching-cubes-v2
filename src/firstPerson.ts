@@ -82,6 +82,9 @@ scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
+// [up, down, left, right]
+const keys = [false, false, false, false];
+
 // const modal = document.getElementById("modal");
 // const topBar = document.getElementById("top-bar");
 
@@ -114,38 +117,51 @@ let cameraRotationXZOffset = 0;
 let cameraRotationYOffset = 0;
 let cameraMoveX = 0;
 let cameraMoveY = 0;
+let cameraRotateY = 0;
 
 // const radius = 4;
 
 const onXYControllerLook = (value: THREE.Vector2) => {
-  console.log("LOOK", value);
   cameraRotationXZOffset -= value.x * 0.1;
   cameraRotationYOffset += value.y * 0.1;
   cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
+  cameraRotateY = 0;
+
+  if (value.x < 0) {
+    cameraRotateY += 0.05;
+  }
+  if (value.x > 0) {
+    cameraRotateY -= 0.05;
+  }
 };
 
 const onXYControllerMove = (value: THREE.Vector2) => {
   // console.log("MOVE", value);
+  keys[0] = false;
+  keys[1] = false;
+  keys[2] = false;
+  keys[3] = false;
   const tmpVec = [0, 0];
   if (value.y > 0) {
     //w
     tmpVec[0] += Math.cos(cameraRotationXZOffset) * 0.75;
     tmpVec[1] -= Math.sin(cameraRotationXZOffset) * 0.75;
-  }
-  if (value.y < 0) {
+    keys[0] = true;
+  } else if (value.y < 0) {
     //s
     tmpVec[0] -= Math.cos(cameraRotationXZOffset) * 0.75;
     tmpVec[1] += Math.sin(cameraRotationXZOffset) * 0.75;
-  }
-  if (value.x > 0) {
+    keys[1] = true;
+  } else if (value.x > 0) {
     //a
     tmpVec[0] += Math.sin(cameraRotationXZOffset) * 0.75;
     tmpVec[1] += Math.cos(cameraRotationXZOffset) * 0.75;
-  }
-  if (value.x < 0) {
+    keys[3] = true;
+  } else if (value.x < 0) {
     //d
     tmpVec[0] -= Math.sin(cameraRotationXZOffset) * 0.75;
     tmpVec[1] -= Math.cos(cameraRotationXZOffset) * 0.75;
+    keys[2] = true;
   }
   cameraMoveX = tmpVec[0];
   cameraMoveY = tmpVec[1];
@@ -224,9 +240,6 @@ let yVelocity = 0;
 let grounded = false;
 let jump = false;
 
-// [up, down, left, right]
-const keys = [false, false, false, false];
-
 const cameraDir = new THREE.Vector3();
 
 const groundRaycaster = new THREE.Raycaster(
@@ -278,33 +291,33 @@ function move() {
   let moveZ = normalizedCameraDir.y * MOVE_SPEED;
 
   if (groundMesh) {
-    if (!isMobile) {
-      const frontIntersects = checkIntersects(frontRaycaster, groundMesh, 3);
-      const backIntersects = checkIntersects(backRaycaster, groundMesh, 3);
-      const leftIntersects = checkIntersects(leftRaycaster, groundMesh, 3);
-      const rightIntersects = checkIntersects(rightRaycaster, groundMesh, 3);
-      if (frontIntersects && moveX > 0) moveX = 0;
-      if (backIntersects && moveX < 0) moveX = 0;
-      if (leftIntersects && moveZ > 0) moveZ = 0;
-      if (rightIntersects && moveZ < 0) moveZ = 0;
+    // if (!isMobile) {
+    const frontIntersects = checkIntersects(frontRaycaster, groundMesh, 3);
+    const backIntersects = checkIntersects(backRaycaster, groundMesh, 3);
+    const leftIntersects = checkIntersects(leftRaycaster, groundMesh, 3);
+    const rightIntersects = checkIntersects(rightRaycaster, groundMesh, 3);
+    if (frontIntersects && moveX > 0) moveX = 0;
+    if (backIntersects && moveX < 0) moveX = 0;
+    if (leftIntersects && moveZ > 0) moveZ = 0;
+    if (rightIntersects && moveZ < 0) moveZ = 0;
 
-      if (keys[0]) {
-        camera.position.x += moveX;
-        camera.position.z += moveZ;
-      }
-      if (keys[1]) {
-        camera.position.x -= moveX;
-        camera.position.z -= moveZ;
-      }
-      if (keys[2]) {
-        camera.position.x += moveZ;
-        camera.position.z -= moveX;
-      }
-      if (keys[3]) {
-        camera.position.x -= moveZ;
-        camera.position.z += moveX;
-      }
+    if (keys[0]) {
+      camera.position.x += moveX;
+      camera.position.z += moveZ;
     }
+    if (keys[1]) {
+      camera.position.x -= moveX;
+      camera.position.z -= moveZ;
+    }
+    if (keys[2]) {
+      camera.position.x += moveZ;
+      camera.position.z -= moveX;
+    }
+    if (keys[3]) {
+      camera.position.x -= moveZ;
+      camera.position.z += moveX;
+    }
+    // }
   }
 
   if (jump && grounded) {
@@ -437,8 +450,10 @@ function animation(_time: number) {
     //   camera.position.y + radius * Math.atan(cameraRotationYOffset),
     //   camera.position.z + radius * Math.sin(cameraRotationXZOffset)
     // );
-    camera.position.x += cameraMoveX;
-    camera.position.z += cameraMoveY;
+    // camera.position.x += cameraMoveX;
+    // camera.position.z += cameraMoveY;
+
+    camera.rotateY(cameraRotateY);
     // camera.lookAt(
     //   camera.position.x,
     //   camera.position.y + 1.5,
