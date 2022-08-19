@@ -127,10 +127,10 @@ const onXYControllerLook = (value: THREE.Vector2) => {
   cameraRotateY = 0;
 
   if (value.x < 0) {
-    cameraRotateY += 0.05;
+    cameraRotateY += 0.01;
   }
   if (value.x > 0) {
-    cameraRotateY -= 0.05;
+    cameraRotateY -= 0.01;
   }
 };
 
@@ -334,8 +334,8 @@ function move() {
         const moveZ2 =
           normalizedCameraDir.x * Math.sin(theta) +
           normalizedCameraDir.y * Math.cos(theta);
-        camera.position.x += moveX2;
-        camera.position.z += moveZ2;
+        camera.position.x += moveX2 * MOVE_SPEED;
+        camera.position.z += moveZ2 * MOVE_SPEED;
       }
     }
   }
