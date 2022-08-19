@@ -81,13 +81,11 @@ const handleLgMediaQuery = (matches: boolean) => {
   if (configContainer && btnContainer && largeEditContainer) {
     if (!matches) {
       // Screen small
-      configContainer.style.display = "block";
       btnContainer.style.display = "block";
       largeEditContainer.style.display = "none";
     } else {
       // Screen large
       largeEditContainer.style.display = "block";
-      configContainer.style.display = "none";
       btnContainer.style.display = "none";
     }
   }
@@ -97,6 +95,18 @@ handleLgMediaQuery(lgMediaQuery.matches);
 
 lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
 
+openConfigBtn?.addEventListener("touchend", () => {
+  if (configContainer) {
+    if (
+      configContainer.style.display === "none" ||
+      configContainer.style.display === ""
+    ) {
+      configContainer.style.display = "block";
+    } else {
+      configContainer.style.display = "none";
+    }
+  }
+});
 openConfigBtn?.addEventListener("click", () => {
   if (configContainer) {
     if (
