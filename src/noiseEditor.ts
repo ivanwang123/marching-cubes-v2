@@ -90,9 +90,9 @@ const handleLgMediaQuery = (matches: boolean) => {
   }
 };
 
-handleLgMediaQuery(lgMediaQuery.matches);
+// handleLgMediaQuery(lgMediaQuery.matches);
 
-lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
+// lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
 
 openConfigBtn?.addEventListener("click", () => {
   if (configContainer) {
