@@ -78,9 +78,6 @@ new PointerLockControls(camera, document.body);
 window.addEventListener("click", () => {
   document.body.requestPointerLock();
 });
-window.addEventListener("touchend", () => {
-  document.body.requestPointerLock();
-});
 
 document.addEventListener("pointerlockchange", () => {
   if (modal) {
