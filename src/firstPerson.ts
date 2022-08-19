@@ -127,10 +127,10 @@ const onXYControllerLook = (value: THREE.Vector2) => {
   cameraRotateY = 0;
 
   if (value.x < 0) {
-    cameraRotateY += 0.01;
+    cameraRotateY += 0.02;
   }
   if (value.x > 0) {
-    cameraRotateY -= 0.01;
+    cameraRotateY -= 0.02;
   }
 };
 

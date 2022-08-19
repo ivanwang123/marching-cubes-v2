@@ -68,6 +68,18 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target = new THREE.Vector3(0, 10, 0);
 controls.update();
 
+/* ============ MEDIA QUERY ============ */
+
+const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
+
+const handleLgMediaQuery = (e: MediaQueryListEvent) => {
+  if (!e.matches) {
+    // Screen small
+  }
+};
+
+lgMediaQuery.addEventListener("change", handleLgMediaQuery);
+
 /* ============ MESH GENERATOR ============ */
 
 let loadedChunks: LoadedChunks = {};
