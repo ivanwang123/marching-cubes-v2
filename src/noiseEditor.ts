@@ -162,16 +162,14 @@ generateMap();
 
 /* ============ SEED ============ */
 
-const currentSeed = document.getElementById(
-  "current-seed"
-) as HTMLParagraphElement;
+const seedText = document.getElementById("seed-text") as HTMLParagraphElement;
 const changeSeedBtn = document.getElementById("change-seed-btn");
 
-currentSeed.textContent = seed.toFixed(7).toString();
+seedText.textContent = seed.toFixed(7).toString();
 
 changeSeedBtn?.addEventListener("click", () => {
   seed = Math.random();
-  currentSeed.textContent = seed.toFixed(7).toString();
+  seedText.textContent = seed.toFixed(7).toString();
   generateMap();
 });
 
@@ -255,20 +253,13 @@ resetNoiseBtn?.addEventListener("click", () => {
   generateMap();
 });
 
-/* ============ SAVE & RESET ============ */
+/* ============ SAVE ============ */
 
-const saveBtn = document.getElementById("save-btn");
-const resetBtn = document.getElementById("reset-btn");
+const generateBtn = document.getElementById("generate-btn");
 
-saveBtn?.addEventListener("click", () => {
+generateBtn?.addEventListener("click", () => {
   sessionStorage.setItem(storageKeys.NOISE_LAYERS, noiseLayers.toString());
   sessionStorage.setItem(storageKeys.MAP_SEED, seed.toString());
-});
-
-resetBtn?.addEventListener("click", () => {
-  controls.reset();
-  controls.target = new THREE.Vector3(0, 10, 0);
-  controls.update();
 });
 
 /* ============ ANIMATION ============ */
