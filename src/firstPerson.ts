@@ -118,7 +118,7 @@ let cameraMoveY = 0;
 // const radius = 4;
 
 const onXYControllerLook = (value: THREE.Vector2) => {
-  // console.log("LOOK", value);
+  console.log("LOOK", value);
   cameraRotationXZOffset -= value.x * 0.1;
   cameraRotationYOffset += value.y * 0.1;
   cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
@@ -126,27 +126,29 @@ const onXYControllerLook = (value: THREE.Vector2) => {
 
 const onXYControllerMove = (value: THREE.Vector2) => {
   // console.log("MOVE", value);
-  // const tmpVec = [0, 0];
+  const tmpVec = [0, 0];
   if (value.y > 0) {
     //w
-    cameraMoveX += Math.cos(cameraRotationXZOffset) * 0.75;
-    cameraMoveY -= Math.sin(cameraRotationXZOffset) * 0.75;
+    tmpVec[0] += Math.cos(cameraRotationXZOffset) * 0.75;
+    tmpVec[1] -= Math.sin(cameraRotationXZOffset) * 0.75;
   }
   if (value.y < 0) {
     //s
-    cameraMoveX -= Math.cos(cameraRotationXZOffset) * 0.75;
-    cameraMoveY += Math.sin(cameraRotationXZOffset) * 0.75;
+    tmpVec[0] -= Math.cos(cameraRotationXZOffset) * 0.75;
+    tmpVec[1] += Math.sin(cameraRotationXZOffset) * 0.75;
   }
   if (value.x > 0) {
     //a
-    cameraMoveX += Math.sin(cameraRotationXZOffset) * 0.75;
-    cameraMoveY += Math.cos(cameraRotationXZOffset) * 0.75;
+    tmpVec[0] += Math.sin(cameraRotationXZOffset) * 0.75;
+    tmpVec[1] += Math.cos(cameraRotationXZOffset) * 0.75;
   }
   if (value.x < 0) {
     //d
-    cameraMoveX -= Math.sin(cameraRotationXZOffset) * 0.75;
-    cameraMoveY -= Math.cos(cameraRotationXZOffset) * 0.75;
+    tmpVec[0] -= Math.sin(cameraRotationXZOffset) * 0.75;
+    tmpVec[1] -= Math.cos(cameraRotationXZOffset) * 0.75;
   }
+  cameraMoveX = tmpVec[0];
+  cameraMoveY = tmpVec[1];
 };
 
 if (isMobile) {

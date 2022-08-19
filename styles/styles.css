@@ -26,6 +26,7 @@ h6 {
 
 #app {
   position: absolute;
+  z-index: 0;
 }
 
 #XYControllerMove {
@@ -36,6 +37,7 @@ h6 {
   bottom: 0px;
   background-color: rgba(255, 255, 255, 0.1);
   display: none;
+  z-index: 50;
 }
 
 #XYControllerLook {
@@ -46,4 +48,5 @@ h6 {
   bottom: 0px;
   background-color: rgba(255, 255, 255, 0.1);
   display: none;
+  z-index: 50;
 }

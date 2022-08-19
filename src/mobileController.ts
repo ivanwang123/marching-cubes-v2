@@ -28,19 +28,26 @@ export default class MobileController {
     this.update();
 
     this.canvas.addEventListener("touchmove", (e) => {
-      console.log("TOUCHMOVE");
       e.preventDefault();
+      // console.log(e);
       let touchesId = 0; //use the touchId of the touch within the boundary of the canvas
       if (
-        e.touches[0].screenX > this.canvas.offsetLeft &&
-        e.touches[0].screenX < this.canvas.offsetLeft + this.canvas.width
+        e.touches[0].clientX > this.canvas.offsetLeft &&
+        e.touches[0].clientX < this.canvas.offsetLeft + this.canvas.width
       ) {
         touchesId = 0;
       } else {
         touchesId = 1; //assume that there is a max of 2 possible fingers on the screen
       }
-      this.coords.x = e.touches[touchesId].screenX - this.canvas.offsetLeft;
-      this.coords.y = e.touches[touchesId].screenY - this.canvas.offsetTop;
+      this.coords.x = e.touches[touchesId].clientX - this.canvas.offsetLeft;
+      this.coords.y = e.touches[touchesId].clientY - this.canvas.offsetTop;
+      // console.log(
+      //   e.touches[0].clientX,
+      //   e.touches[0].clientY,
+      //   this.canvas.offsetLeft,
+      //   this.canvas.offsetTop
+      // );
+      // 517.7142944335938 872.0000610351562 0 716
     });
 
     this.canvas.addEventListener("touchend", (e) => {
@@ -50,7 +57,6 @@ export default class MobileController {
     });
 
     this.canvas.addEventListener("mousemove", (e) => {
-      console.log("MOUSEMOVE");
       if (e.button === 1) {
         this.coords.x = e.pageX - this.canvas.offsetLeft;
         this.coords.y = e.pageY - this.canvas.offsetTop;
@@ -71,9 +77,10 @@ export default class MobileController {
 
   private update() {
     this.value.x =
-      ((this.canvas.clientWidth / 2 - this.coords.x) /
-        this.canvas.clientWidth) *
-      2;
+      -(
+        (this.canvas.clientWidth / 2 - this.coords.x) /
+        this.canvas.clientWidth
+      ) * 2;
     this.value.y =
       ((this.canvas.clientHeight / 2 - this.coords.y) /
         this.canvas.clientWidth) *
