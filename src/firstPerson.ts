@@ -6,6 +6,8 @@ import { disposeNode } from "./disposeNode";
 import { editNoiseMapChunks } from "./noiseMapEditor";
 import { LoadedChunks, NoiseLayers, WorkerReturnMessage } from "./types";
 import { getChunkKey, getSeed } from "./utils";
+import { JoystickControls } from "three-joystick";
+
 import Worker from "web-worker";
 import Stats from "stats.js";
 
@@ -90,6 +92,8 @@ document.addEventListener("pointerlockchange", () => {
     }
   }
 });
+
+const joystickControls = new JoystickControls(camera, scene);
 
 /* ============ GENERATE WORLD ============ */
 
@@ -333,6 +337,23 @@ function animation(_time: number) {
 
   camera.getWorldDirection(cameraDir);
   raycaster.set(camera.position, cameraDir);
+
+  joystickControls.update((movement) => {
+    if (movement) {
+      /**
+       * The values reported back might be too large for your scene.
+       * In that case you will need to control the sensitivity.
+       */
+      const sensitivity = 0.002;
+
+      /**
+       * Do something with the values, for example changing the position
+       * of the object
+       */
+      camera.position.x += movement.moveX * sensitivity;
+      camera.position.z += movement.moveY * sensitivity;
+    }
+  });
 
   move();
   editTerrain();
