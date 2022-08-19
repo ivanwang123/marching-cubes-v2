@@ -571,3 +571,19 @@ window.addEventListener("resize", function () {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 });
+
+const canvas = document.getElementById("app") as HTMLCanvasElement;
+window.addEventListener("scroll", () => {
+  // await new Promise(resolve => window.requestAnimationFrame(resolve))
+  const { scrollTop, scrollLeft, scrollHeight, clientHeight } = canvas;
+  const atTop = scrollTop === 0;
+  const beforeTop = 1;
+  const atBottom = scrollTop === scrollHeight - clientHeight;
+  const beforeBottom = scrollHeight - clientHeight - 1;
+
+  if (atTop) {
+    window.scrollTo(scrollLeft, beforeTop);
+  } else if (atBottom) {
+    window.scrollTo(scrollLeft, beforeBottom);
+  }
+});
