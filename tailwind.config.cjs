@@ -8,6 +8,9 @@ module.exports = {
         "right-auto": "1fr auto",
         "mid-auto": "1fr minmax(auto,56rem) 1fr",
       },
+      gridTemplateRows: {
+        "fr-auto-auto": "1fr auto auto",
+      },
     },
   },
   plugins: [],

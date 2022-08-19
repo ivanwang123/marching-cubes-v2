@@ -72,13 +72,40 @@ controls.update();
 
 const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
 
-const handleLgMediaQuery = (e: MediaQueryListEvent) => {
-  if (!e.matches) {
-    // Screen small
+const smallEditContainer = document.getElementById("small-edit-container");
+const configContainer = document.getElementById("config-container");
+const openConfigBtn = document.getElementById("open-config-btn");
+const largeEditContainer = document.getElementById("large-edit-container");
+
+const handleLgMediaQuery = (matches: boolean) => {
+  if (smallEditContainer && largeEditContainer) {
+    if (!matches) {
+      // Screen small
+      smallEditContainer.style.display = "grid";
+      largeEditContainer.style.display = "none";
+    } else {
+      largeEditContainer.style.display = "block";
+      smallEditContainer.style.display = "none";
+    }
   }
 };
 
-lgMediaQuery.addEventListener("change", handleLgMediaQuery);
+handleLgMediaQuery(lgMediaQuery.matches);
+
+lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
+
+openConfigBtn?.addEventListener("click", () => {
+  if (configContainer) {
+    if (
+      configContainer.style.display === "none" ||
+      configContainer.style.display === ""
+    ) {
+      configContainer.style.display = "block";
+    } else {
+      configContainer.style.display = "none";
+    }
+  }
+});
 
 /* ============ MESH GENERATOR ============ */
 
