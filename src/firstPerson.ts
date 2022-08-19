@@ -1,13 +1,13 @@
 import * as THREE from "three";
-import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
+// import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { generateMesh } from "./meshGenerator";
 import { CHUNK_SIZE, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { editNoiseMapChunks } from "./noiseMapEditor";
 import { LoadedChunks, NoiseLayers, WorkerReturnMessage } from "./types";
 import { getChunkKey, getSeed } from "./utils";
-import { JoystickControls } from "three-joystick";
-
+// import { JoystickControls } from "three-joystick";
+import MobileController from "./mobileController";
 import Worker from "web-worker";
 import Stats from "stats.js";
 
@@ -17,6 +17,16 @@ const LOAD_CHUNK_RADIUS = 2;
 
 const interpolate = sessionStorage.getItem(storageKeys.INTERPOLATE) === "true";
 const wireframe = sessionStorage.getItem(storageKeys.WIREFRAME) === "true";
+
+let isMobile = false;
+
+if (
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
+) {
+  isMobile = true;
+}
 
 /* ============ SETUP ============ */
 
@@ -72,28 +82,85 @@ scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
-const modal = document.getElementById("modal");
-const topBar = document.getElementById("top-bar");
+// const modal = document.getElementById("modal");
+// const topBar = document.getElementById("top-bar");
 
-new PointerLockControls(camera, document.body);
+// new PointerLockControls(camera, document.body);
 
-window.addEventListener("click", () => {
-  document.body.requestPointerLock();
-});
+// window.addEventListener("click", () => {
+//   document.body.requestPointerLock();
+// });
 
-document.addEventListener("pointerlockchange", () => {
-  if (modal) {
-    if (document.pointerLockElement === document.body) {
-      modal.style.display = "none";
-      if (topBar) topBar.style.display = "flex";
-    } else {
-      modal.style.display = "grid";
-      if (topBar) topBar.style.display = "none";
-    }
+// document.addEventListener("pointerlockchange", () => {
+//   if (modal) {
+//     if (document.pointerLockElement === document.body) {
+//       modal.style.display = "none";
+//       if (topBar) topBar.style.display = "flex";
+//     } else {
+//       modal.style.display = "grid";
+//       if (topBar) topBar.style.display = "none";
+//     }
+//   }
+// });
+
+// const joystickControls = new JoystickControls(camera, scene);
+
+/* ============ MOBILE CONTROLS ============ */
+
+// let xycontrollerLook: MobileController;
+// let xycontrollerMove: MobileController;
+
+let cameraRotationXZOffset = 0;
+let cameraRotationYOffset = 0;
+let cameraMoveX = 0;
+let cameraMoveY = 0;
+
+const radius = 4;
+
+const onXYControllerLook = (value: THREE.Vector2) => {
+  // console.log("LOOK", value);
+  cameraRotationXZOffset -= value.x * 0.1;
+  cameraRotationYOffset += value.y * 0.1;
+  cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
+};
+
+const onXYControllerMove = (value: THREE.Vector2) => {
+  // console.log("MOVE", value);
+  // const tmpVec = [0, 0];
+  if (value.y > 0) {
+    //w
+    cameraMoveX += Math.cos(cameraRotationXZOffset) * 0.75;
+    cameraMoveY -= Math.sin(cameraRotationXZOffset) * 0.75;
   }
-});
+  if (value.y < 0) {
+    //s
+    cameraMoveX -= Math.cos(cameraRotationXZOffset) * 0.75;
+    cameraMoveY += Math.sin(cameraRotationXZOffset) * 0.75;
+  }
+  if (value.x > 0) {
+    //a
+    cameraMoveX += Math.sin(cameraRotationXZOffset) * 0.75;
+    cameraMoveY += Math.cos(cameraRotationXZOffset) * 0.75;
+  }
+  if (value.x < 0) {
+    //d
+    cameraMoveX -= Math.sin(cameraRotationXZOffset) * 0.75;
+    cameraMoveY -= Math.cos(cameraRotationXZOffset) * 0.75;
+  }
+};
 
-const joystickControls = new JoystickControls(camera, scene);
+if (isMobile) {
+  // xycontrollerLook =
+  new MobileController(
+    document.getElementById("XYControllerLook") as HTMLCanvasElement,
+    onXYControllerLook
+  );
+  // xycontrollerMove =
+  new MobileController(
+    document.getElementById("XYControllerMove") as HTMLCanvasElement,
+    onXYControllerMove
+  );
+}
 
 /* ============ GENERATE WORLD ============ */
 
@@ -209,31 +276,33 @@ function move() {
   let moveZ = normalizedCameraDir.y * MOVE_SPEED;
 
   if (groundMesh) {
-    const frontIntersects = checkIntersects(frontRaycaster, groundMesh, 3);
-    const backIntersects = checkIntersects(backRaycaster, groundMesh, 3);
-    const leftIntersects = checkIntersects(leftRaycaster, groundMesh, 3);
-    const rightIntersects = checkIntersects(rightRaycaster, groundMesh, 3);
-    if (frontIntersects && moveX > 0) moveX = 0;
-    if (backIntersects && moveX < 0) moveX = 0;
-    if (leftIntersects && moveZ > 0) moveZ = 0;
-    if (rightIntersects && moveZ < 0) moveZ = 0;
-  }
+    if (!isMobile) {
+      const frontIntersects = checkIntersects(frontRaycaster, groundMesh, 3);
+      const backIntersects = checkIntersects(backRaycaster, groundMesh, 3);
+      const leftIntersects = checkIntersects(leftRaycaster, groundMesh, 3);
+      const rightIntersects = checkIntersects(rightRaycaster, groundMesh, 3);
+      if (frontIntersects && moveX > 0) moveX = 0;
+      if (backIntersects && moveX < 0) moveX = 0;
+      if (leftIntersects && moveZ > 0) moveZ = 0;
+      if (rightIntersects && moveZ < 0) moveZ = 0;
 
-  if (keys[0]) {
-    camera.position.x += moveX;
-    camera.position.z += moveZ;
-  }
-  if (keys[1]) {
-    camera.position.x -= moveX;
-    camera.position.z -= moveZ;
-  }
-  if (keys[2]) {
-    camera.position.x += moveZ;
-    camera.position.z -= moveX;
-  }
-  if (keys[3]) {
-    camera.position.x -= moveZ;
-    camera.position.z += moveX;
+      if (keys[0]) {
+        camera.position.x += moveX;
+        camera.position.z += moveZ;
+      }
+      if (keys[1]) {
+        camera.position.x -= moveX;
+        camera.position.z -= moveZ;
+      }
+      if (keys[2]) {
+        camera.position.x += moveZ;
+        camera.position.z -= moveX;
+      }
+      if (keys[3]) {
+        camera.position.x -= moveZ;
+        camera.position.z += moveX;
+      }
+    }
   }
 
   if (jump && grounded) {
@@ -338,24 +407,44 @@ function animation(_time: number) {
   camera.getWorldDirection(cameraDir);
   raycaster.set(camera.position, cameraDir);
 
-  joystickControls.update((movement) => {
-    if (movement) {
-      /**
-       * The values reported back might be too large for your scene.
-       * In that case you will need to control the sensitivity.
-       */
-      const sensitivity = 0.002;
+  // joystickControls.update((movement) => {
+  //   if (movement) {
+  //     /**
+  //      * The values reported back might be too large for your scene.
+  //      * In that case you will need to control the sensitivity.
+  //      */
+  //     const sensitivity = 0.002;
 
-      /**
-       * Do something with the values, for example changing the position
-       * of the object
-       */
-      camera.position.x += movement.moveX * sensitivity;
-      camera.position.z += movement.moveY * sensitivity;
-    }
-  });
+  //     /**
+  //      * Do something with the values, for example changing the position
+  //      * of the object
+  //      */
+  //     camera.position.x += movement.moveX * sensitivity;
+  //     camera.position.z += movement.moveY * sensitivity;
+  //   }
+  // });
 
+  if (isMobile) {
+    // console.log(
+    //   Math.cos(cameraRotationXZOffset),
+    //   Math.atan(cameraRotationYOffset),
+    //   Math.sin(cameraRotationXZOffset)
+    // );
+    // camera.position.set(
+    //   camera.position.x + radius * Math.cos(cameraRotationXZOffset),
+    //   camera.position.y + radius * Math.atan(cameraRotationYOffset),
+    //   camera.position.z + radius * Math.sin(cameraRotationXZOffset)
+    // );
+    camera.position.x += cameraMoveX;
+    camera.position.z += cameraMoveY;
+    // camera.lookAt(
+    //   camera.position.x,
+    //   camera.position.y + 1.5,
+    //   camera.position.z
+    // );
+  }
   move();
+
   editTerrain();
 
   stats.end();

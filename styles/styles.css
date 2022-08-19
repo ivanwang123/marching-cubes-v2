@@ -15,10 +15,6 @@ body {
   background-color: #000000;
 }
 
-#app {
-  position: absolute;
-}
-
 h1,
 h2,
 h3,
@@ -28,7 +24,26 @@ h6 {
   font-family: "Righteous", cursive;
 }
 
-.text-see-through {
-  -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
+#app {
+  position: absolute;
+}
+
+#XYControllerMove {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: none;
+}
+
+#XYControllerLook {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: none;
 }
