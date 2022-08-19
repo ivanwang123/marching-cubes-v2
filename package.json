@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && npm run tailwind:build && vite build",
     "preview": "vite preview",
-    "tailwind": "npx tailwindcss -i ./styles/styles.css -o ./styles/tailwind.css --watch"
+    "tailwind": "npx tailwindcss -i ./styles/styles.css -o ./styles/tailwind.css --watch",
+    "tailwind:build": "npx tailwindcss -i ./styles/styles.css -o ./styles/tailwind.css --minify"
   },
   "devDependencies": {
     "@types/three": "^0.143.0",
