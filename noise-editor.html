@@ -117,7 +117,7 @@
 
     <div
       id="large-edit-container"
-      class="absolute left-10 right-10 top-14 bottom-40 flex flex-col border border-white bg-black bg-opacity-90 text-white p-8 z-50 lg:top-10 lg:right-10 lg:bottom-auto lg:left-auto"
+      class="absolute left-10 right-10 top-14 bottom-40 flex flex-col border border-white bg-black bg-opacity-90 text-white p-8 overflow-auto z-50 lg:top-10 lg:right-10 lg:bottom-auto lg:left-auto"
     >
       <h3 class="font-bold mb-4">NOISE FREQUENCIES</h3>
       <div class="grid grid-cols-2-auto gap-x-4 gap-y-2">
@@ -186,18 +186,22 @@
         </div>
       </div>
 
-      <hr class="my-8" />
-
-      <a
-        href="first-person.html"
-        class="block bg-white font-bold text-black text-center px-4 py-1 transition-all ring-white ring-offset-2 ring-offset-black hover:ring-2"
-        id="generate-btn"
-      >
-        GENERATE WORLD
-      </a>
+      <div class="hidden lg:block">
+        <hr class="my-8" />
+        <a
+          href="first-person.html"
+          class="block bg-white font-bold text-black text-center px-4 py-1 transition-all ring-white ring-offset-2 ring-offset-black hover:ring-2"
+          id="generate-btn"
+        >
+          GENERATE WORLD
+        </a>
+      </div>
     </div>
 
-    <div id="btn-container" class="absolute left-10 right-10 bottom-10 z-50">
+    <div
+      id="btn-container"
+      class="absolute left-10 right-10 bottom-10 z-50 lg:hidden"
+    >
       <button
         type="button"
         class="w-full text-white border border-white px-4 py-1 mb-4 transition hover:bg-neutral-800"
