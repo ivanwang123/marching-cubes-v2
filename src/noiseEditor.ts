@@ -39,6 +39,7 @@ camera.position.x = 45;
 
 // Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x00ff00);
 
 /* ============ SKYBOX ============ */
 
@@ -60,7 +61,7 @@ const materialArray = skyboxPaths.map((path) => {
 });
 const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
 const skybox = new THREE.Mesh(skyboxGeom, materialArray);
-scene.add(skybox);
+// scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
