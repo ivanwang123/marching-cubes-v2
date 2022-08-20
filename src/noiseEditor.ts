@@ -43,24 +43,24 @@ scene.background = new THREE.Color(0x00ff00);
 
 /* ============ SKYBOX ============ */
 
-const skyboxPaths = [
-  "skybox/front.png",
-  "skybox/back.png",
-  "skybox/top.png",
-  "skybox/bottom.png",
-  "skybox/left.png",
-  "skybox/right.png",
-];
+// const skyboxPaths = [
+//   "skybox/front.png",
+//   "skybox/back.png",
+//   "skybox/top.png",
+//   "skybox/bottom.png",
+//   "skybox/left.png",
+//   "skybox/right.png",
+// ];
 
-const materialArray = skyboxPaths.map((path) => {
-  const texture = new THREE.TextureLoader().load(path);
-  return new THREE.MeshBasicMaterial({
-    map: texture,
-    side: THREE.BackSide,
-  });
-});
-const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
-const skybox = new THREE.Mesh(skyboxGeom, materialArray);
+// const materialArray = skyboxPaths.map((path) => {
+//   const texture = new THREE.TextureLoader().load(path);
+//   return new THREE.MeshBasicMaterial({
+//     map: texture,
+//     side: THREE.BackSide,
+//   });
+// });
+// const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
+// const skybox = new THREE.Mesh(skyboxGeom, materialArray);
 // scene.add(skybox);
 
 /* ============ CONTROLS ============ */
