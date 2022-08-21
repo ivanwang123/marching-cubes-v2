@@ -39,7 +39,7 @@ camera.position.x = 45;
 
 // Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00ff00);
+// scene.background = new THREE.Color(0x00ff00);
 
 /* ============ SKYBOX ============ */
 
@@ -71,52 +71,55 @@ controls.update();
 
 /* ============ MEDIA QUERY ============ */
 
-const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
+// const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
 
-const configContainer = document.getElementById("config-container");
-const openConfigBtn = document.getElementById("open-config-btn");
-const btnContainer = document.getElementById("btn-container");
-const largeEditContainer = document.getElementById("large-edit-container");
+const editorContainer = document.getElementById("editor-container");
+const openEditorBtn = document.getElementById("open-editor-btn");
+// const btnContainer = document.getElementById("btn-container");
+// const largeEditContainer = document.getElementById("large-edit-container");
 
-const handleLgMediaQuery = (matches: boolean) => {
-  if (configContainer && btnContainer && largeEditContainer) {
-    if (!matches) {
-      // Screen small
-      btnContainer.style.display = "block";
-      largeEditContainer.style.display = "none";
-    } else {
-      // Screen large
-      largeEditContainer.style.display = "block";
-      btnContainer.style.display = "none";
-    }
-  }
-};
+// const handleLgMediaQuery = (matches: boolean) => {
+//   if (editorContainer && btnContainer && largeEditContainer) {
+//     if (!matches) {
+//       // Screen small
+//       btnContainer.style.display = "block";
+//       largeEditContainer.style.display = "none";
+//     } else {
+//       // Screen large
+//       largeEditContainer.style.display = "block";
+//       btnContainer.style.display = "none";
+//     }
+//   }
+// };
 
-handleLgMediaQuery(lgMediaQuery.matches);
+// handleLgMediaQuery(lgMediaQuery.matches);
 
-lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
+// lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
 
-openConfigBtn?.addEventListener("touchend", () => {
-  if (configContainer) {
+// openEditorBtn?.addEventListener("touchend", () => {
+//   if (editorContainer) {
+//     if (
+//       editorContainer.style.display === "none" ||
+//       editorContainer.style.display === ""
+//     ) {
+//       editorContainer.style.display = "flex";
+//     } else {
+//       editorContainer.style.display = "none";
+//     }
+//   }
+// });
+openEditorBtn?.addEventListener("click", () => {
+  console.log(editorContainer?.style.display);
+  if (editorContainer) {
     if (
-      configContainer.style.display === "none" ||
-      configContainer.style.display === ""
+      editorContainer.style.display === "none" ||
+      editorContainer.style.display === ""
     ) {
-      configContainer.style.display = "block";
+      editorContainer.style.display = "flex";
+      openEditorBtn.innerHTML = "CLOSE EDITOR";
     } else {
-      configContainer.style.display = "none";
-    }
-  }
-});
-openConfigBtn?.addEventListener("click", () => {
-  if (configContainer) {
-    if (
-      configContainer.style.display === "none" ||
-      configContainer.style.display === ""
-    ) {
-      configContainer.style.display = "block";
-    } else {
-      configContainer.style.display = "none";
+      editorContainer.style.display = "none";
+      openEditorBtn.innerHTML = "EDIT MAP";
     }
   }
 });

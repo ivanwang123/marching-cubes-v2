@@ -116,11 +116,11 @@
     </div> -->
 
     <div
-      id="large-edit-container"
-      class="absolute left-5 right-5 top-14 bottom-32 flex flex-col border border-white bg-black bg-opacity-10 text-white p-8 overflow-auto z-50 lg:top-10 lg:right-10 lg:bottom-auto lg:left-auto"
+      id="editor-container"
+      class="hidden absolute left-5 right-5 top-14 bottom-32 flex flex-col border border-white bg-black bg-opacity-80 text-white p-8 overflow-auto z-50 lg:w-72 lg:top-10 lg:right-10 lg:bottom-40 lg:left-auto"
     >
       <h3 class="font-bold mb-4">NOISE FREQUENCIES</h3>
-      <div class="grid grid-cols-2-auto gap-x-4 gap-y-2">
+      <div class="grid grid-cols-left-auto gap-x-4 gap-y-2">
         <div class="col-start-2 flex justify-between text-sm -mb-2">
           <p>High</p>
           <p>Low</p>
@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <div class="hidden lg:block">
+      <!-- <div class="hidden lg:block">
         <hr class="my-8" />
         <a
           href="first-person.html"
@@ -195,19 +195,19 @@
         >
           GENERATE WORLD
         </a>
-      </div>
+      </div> -->
     </div>
 
-    <!-- <div
+    <div
       id="btn-container"
-      class="absolute left-5 right-5 bottom-5 z-50 lg:hidden"
+      class="absolute left-5 right-5 bottom-5 z-50 lg:w-72 lg:left-auto lg:right-10 lg:bottom-10"
     >
       <button
         type="button"
         class="w-full text-white border border-white px-4 py-1 mb-4 transition hover:bg-neutral-800"
-        id="open-config-btn"
+        id="open-editor-btn"
       >
-        EDIT NOISE MAP
+        EDIT MAP
       </button>
       <a
         href="first-person.html"
@@ -216,7 +216,7 @@
       >
         GENERATE WORLD
       </a>
-    </div> -->
+    </div>
 
     <canvas id="app"></canvas>
     <script type="module" src="/src/noiseEditor.ts"></script>
