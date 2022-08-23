@@ -15,9 +15,7 @@ export function mobileController(
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
 
-  canvas.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-
+  const getTouchesId = (e: TouchEvent) => {
     let touchesId = 0;
 
     if (
@@ -29,11 +27,17 @@ export function mobileController(
       touchesId = 1;
     }
 
+    return touchesId;
+  };
+
+  canvas.addEventListener("touchstart", (e: TouchEvent) => {
+    e.preventDefault();
+
     try {
-      anchor.x = e.touches[touchesId].clientX - canvas.offsetLeft;
-      anchor.y = e.touches[touchesId].clientY - canvas.offsetTop;
-      coords.x = e.touches[touchesId].clientX - canvas.offsetLeft;
-      coords.y = e.touches[touchesId].clientY - canvas.offsetTop;
+      anchor.x = e.touches[getTouchesId(e)].clientX - canvas.offsetLeft;
+      anchor.y = e.touches[getTouchesId(e)].clientY - canvas.offsetTop;
+      coords.x = e.touches[getTouchesId(e)].clientX - canvas.offsetLeft;
+      coords.y = e.touches[getTouchesId(e)].clientY - canvas.offsetTop;
     } catch (e) {
       console.error(e);
     }
@@ -41,29 +45,18 @@ export function mobileController(
     touching = true;
   });
 
-  canvas.addEventListener("touchmove", (e) => {
+  canvas.addEventListener("touchmove", (e: TouchEvent) => {
     e.preventDefault();
 
-    let touchesId = 0;
-
-    if (
-      e.touches[0].clientX > canvas.offsetLeft &&
-      e.touches[0].clientX < canvas.offsetLeft + canvas.width
-    ) {
-      touchesId = 0;
-    } else {
-      touchesId = 1;
-    }
-
     try {
-      coords.x = e.touches[touchesId].clientX - canvas.offsetLeft;
-      coords.y = e.touches[touchesId].clientY - canvas.offsetTop;
+      coords.x = e.touches[getTouchesId(e)].clientX - canvas.offsetLeft;
+      coords.y = e.touches[getTouchesId(e)].clientY - canvas.offsetTop;
     } catch (e) {
       console.error(e);
     }
   });
 
-  canvas.addEventListener("touchend", (e) => {
+  canvas.addEventListener("touchend", (e: TouchEvent) => {
     e.preventDefault();
     coords.x = canvas.width / 2;
     coords.y = canvas.height / 2;
