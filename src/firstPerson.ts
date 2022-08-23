@@ -125,9 +125,9 @@ let cameraRotateY = 0;
 
 const onControllerLook = (value: THREE.Vector2) => {
   if (value.x < 0) {
-    cameraRotateY = 0.02;
+    cameraRotateY = 0.015;
   } else if (value.x > 0) {
-    cameraRotateY = -0.02;
+    cameraRotateY = -0.015;
   } else {
     cameraRotateY = 0;
   }
@@ -302,8 +302,8 @@ function move() {
         const mobileMoveZ =
           normalizedCameraDir.x * Math.sin(theta) +
           normalizedCameraDir.y * Math.cos(theta);
-        camera.position.x += mobileMoveX * MOVE_SPEED;
-        camera.position.z += mobileMoveZ * MOVE_SPEED;
+        camera.position.x += (mobileMoveX * MOVE_SPEED) / 2;
+        camera.position.z += (mobileMoveZ * MOVE_SPEED) / 2;
       }
     }
   }

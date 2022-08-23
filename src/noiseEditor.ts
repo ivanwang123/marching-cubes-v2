@@ -39,29 +39,28 @@ camera.position.x = 45;
 
 // Scene
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x00ff00);
 
 /* ============ SKYBOX ============ */
 
-// const skyboxPaths = [
-//   "skybox/front.png",
-//   "skybox/back.png",
-//   "skybox/top.png",
-//   "skybox/bottom.png",
-//   "skybox/left.png",
-//   "skybox/right.png",
-// ];
+const skyboxPaths = [
+  "skybox/front.png",
+  "skybox/back.png",
+  "skybox/top.png",
+  "skybox/bottom.png",
+  "skybox/left.png",
+  "skybox/right.png",
+];
 
-// const materialArray = skyboxPaths.map((path) => {
-//   const texture = new THREE.TextureLoader().load(path);
-//   return new THREE.MeshBasicMaterial({
-//     map: texture,
-//     side: THREE.BackSide,
-//   });
-// });
-// const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
-// const skybox = new THREE.Mesh(skyboxGeom, materialArray);
-// scene.add(skybox);
+const materialArray = skyboxPaths.map((path) => {
+  const texture = new THREE.TextureLoader().load(path);
+  return new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide,
+  });
+});
+const skyboxGeom = new THREE.BoxGeometry(10000, 10000, 10000);
+const skybox = new THREE.Mesh(skyboxGeom, materialArray);
+scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
@@ -69,45 +68,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target = new THREE.Vector3(0, 10, 0);
 controls.update();
 
-/* ============ MEDIA QUERY ============ */
-
-// const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
+/* ============ EDITOR TOGGLE ============ */
 
 const editorContainer = document.getElementById("editor-container");
 const openEditorBtn = document.getElementById("open-editor-btn");
-// const btnContainer = document.getElementById("btn-container");
-// const largeEditContainer = document.getElementById("large-edit-container");
 
-// const handleLgMediaQuery = (matches: boolean) => {
-//   if (editorContainer && btnContainer && largeEditContainer) {
-//     if (!matches) {
-//       // Screen small
-//       btnContainer.style.display = "block";
-//       largeEditContainer.style.display = "none";
-//     } else {
-//       // Screen large
-//       largeEditContainer.style.display = "block";
-//       btnContainer.style.display = "none";
-//     }
-//   }
-// };
-
-// handleLgMediaQuery(lgMediaQuery.matches);
-
-// lgMediaQuery.addEventListener("change", (e) => handleLgMediaQuery(e.matches));
-
-// openEditorBtn?.addEventListener("touchend", () => {
-//   if (editorContainer) {
-//     if (
-//       editorContainer.style.display === "none" ||
-//       editorContainer.style.display === ""
-//     ) {
-//       editorContainer.style.display = "flex";
-//     } else {
-//       editorContainer.style.display = "none";
-//     }
-//   }
-// });
 openEditorBtn?.addEventListener("click", () => {
   console.log(editorContainer?.style.display);
   if (editorContainer) {
