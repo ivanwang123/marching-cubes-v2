@@ -103,6 +103,7 @@ export default class MobileController {
     //   ((this.canvas.clientHeight / 2 - this.coords.y) /
     //     this.canvas.clientWidth) *
     //   2;
+    const ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
     if (this.touching) {
       this.value.x = -(this.anchor.x - this.coords.x);
       this.value.y = this.anchor.y - this.coords.y;
@@ -110,16 +111,29 @@ export default class MobileController {
       console.log(this.value);
 
       this.onChangeCallback(this.value);
-      const ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
       ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
-      ctx.fillStyle = "black";
-      ctx.fillRect(
-        this.coords.x - this.buttonSize.x / 2,
-        this.coords.y - this.buttonSize.y / 2,
-        this.buttonSize.x,
-        this.buttonSize.y
+      ctx.fillStyle = "#00000066";
+      // ctx.fillRect(
+      //   this.coords.x - this.buttonSize.x / 2,
+      //   this.coords.y - this.buttonSize.y / 2,
+      //   this.buttonSize.x,
+      //   this.buttonSize.y
+      // );
+      ctx.beginPath();
+      ctx.arc(this.coords.x, this.coords.y, this.buttonSize.x, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = "#000000aa";
+      ctx.arc(
+        this.anchor.x,
+        this.anchor.y,
+        this.buttonSize.x / 2,
+        0,
+        2 * Math.PI
       );
+      ctx.fill();
     } else {
+      ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
       this.value.x = 0;
       this.value.y = 0;
       this.onChangeCallback(this.value);

@@ -113,7 +113,7 @@ scene.add(skybox);
 let moveVector = new THREE.Vector2();
 
 // let cameraRotationXZOffset = 0;
-let cameraRotationYOffset = 0;
+// let cameraRotationYOffset = 0;
 // let cameraMoveX = 0;
 // let cameraMoveY = 0;
 let cameraRotateY = 0;
@@ -122,8 +122,8 @@ let cameraRotateY = 0;
 
 const onXYControllerLook = (value: THREE.Vector2) => {
   // cameraRotationXZOffset -= value.x * 0.1;
-  cameraRotationYOffset += value.y * 0.1;
-  cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
+  // cameraRotationYOffset += value.y * 0.1;
+  // cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
   cameraRotateY = 0;
 
   if (value.x < 0) {
@@ -474,6 +474,9 @@ function animation(_time: number) {
     // camera.position.z += cameraMoveY;
 
     camera.rotateY(cameraRotateY);
+
+    // camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), cameraRotateY);
+    // camera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), cameraRotateX);
     // camera.lookAt(
     //   camera.position.x,
     //   camera.position.y + 1.5,
