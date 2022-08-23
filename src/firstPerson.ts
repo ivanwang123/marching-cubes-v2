@@ -11,7 +11,6 @@ import {
   WorkerReturnMessage,
 } from "./types";
 import { getChunkKey, getSeed } from "./utils";
-// import { JoystickControls } from "three-joystick";
 import { mobileController } from "./mobileController";
 import Worker from "web-worker";
 import Stats from "stats.js";
@@ -511,7 +510,6 @@ window.addEventListener("resize", function () {
 
 const canvas = document.getElementById("app") as HTMLCanvasElement;
 window.addEventListener("scroll", () => {
-  // await new Promise(resolve => window.requestAnimationFrame(resolve))
   const { scrollTop, scrollLeft, scrollHeight, clientHeight } = canvas;
   const atTop = scrollTop === 0;
   const beforeTop = 1;

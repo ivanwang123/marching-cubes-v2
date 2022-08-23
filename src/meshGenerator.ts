@@ -94,19 +94,18 @@ export function generateMesh(
                 Math.abs(
                   cornerNoises[edgeCorners1[1]] - cornerNoises[edgeCorners1[0]]
                 );
-              // edgeInterpolate1 = parseFloat(edgeInterpolate1.toFixed(3));
+
               let edgeInterpolate2 =
                 Math.abs(cornerNoises[edgeCorners2[0]] - SURFACE_LEVEL) /
                 Math.abs(
                   cornerNoises[edgeCorners2[1]] - cornerNoises[edgeCorners2[0]]
                 );
-              // edgeInterpolate2 = parseFloat(edgeInterpolate2.toFixed(3));
+
               let edgeInterpolate3 =
                 Math.abs(cornerNoises[edgeCorners3[0]] - SURFACE_LEVEL) /
                 Math.abs(
                   cornerNoises[edgeCorners3[1]] - cornerNoises[edgeCorners3[0]]
                 );
-              // edgeInterpolate3 = parseFloat(edgeInterpolate3.toFixed(3));
 
               vertices = new Float32Array([
                 edge1[0] === 0.5 ? edgeInterpolate1 : edge1[0],
