@@ -90,7 +90,7 @@ npm run dev
 Run tailwind to edit the CSS and styling
 
 ```sh
-npm run tailwind
+npm run tailwind:dev
 ```
 
 ## Technology
