@@ -13,6 +13,24 @@
   </head>
   <body>
     <div class="absolute inset-1/2 text-white font-bold z-50">+</div>
+    <div id="mobile-top-bar" class="hidden absolute inset-x-2 top-2 z-50">
+      <a
+        href="noise-editor.html"
+        class="flex items-center text-white underline-offset-4 hover:underline"
+      >
+        <svg
+          class="w-5 h-5 fill-current mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z"
+          />
+        </svg>
+        Back to noise editor
+      </a>
+    </div>
     <div
       id="top-bar"
       class="hidden absolute inset-x-4 top-4 flex items-center text-white/70 text-sm z-50"
@@ -99,8 +117,8 @@
     </div>
 
     <canvas id="app"></canvas>
-    <canvas id="XYControllerLook"></canvas>
-    <canvas id="XYControllerMove"></canvas>
+    <canvas id="controller-look"></canvas>
+    <canvas id="controller-move"></canvas>
     <script type="module" src="/src/firstPerson.ts"></script>
   </body>
 </html>

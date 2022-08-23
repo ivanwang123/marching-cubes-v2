@@ -90,6 +90,9 @@ scene.add(skybox);
 if (!isMobile) {
   const modal = document.getElementById("modal");
   const topBar = document.getElementById("top-bar");
+  const mobileTopBar = document.getElementById("mobile-top-bar");
+
+  if (mobileTopBar) mobileTopBar.style.display = "none";
 
   new PointerLockControls(camera, document.body);
 
@@ -136,15 +139,18 @@ const onControllerMove = (value: THREE.Vector2) => {
 if (isMobile) {
   const modal = document.getElementById("modal");
   const topBar = document.getElementById("top-bar");
+  const mobileTopBar = document.getElementById("mobile-top-bar");
+
+  if (mobileTopBar) mobileTopBar.style.display = "block";
   if (modal) modal.style.display = "none";
   if (topBar) topBar.style.display = "none";
 
   updateControllerLook = mobileController(
-    document.getElementById("XYControllerLook") as HTMLCanvasElement,
+    document.getElementById("controller-look") as HTMLCanvasElement,
     onControllerLook
   );
   updateControllerMove = mobileController(
-    document.getElementById("XYControllerMove") as HTMLCanvasElement,
+    document.getElementById("controller-move") as HTMLCanvasElement,
     onControllerMove
   );
 }
