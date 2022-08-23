@@ -31,8 +31,8 @@ h6 {
 
 #XYControllerMove {
   position: absolute;
-  width: 180px;
-  height: 180px;
+  width: 50%;
+  height: 100%;
   left: 0px;
   bottom: 0px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -42,8 +42,8 @@ h6 {
 
 #XYControllerLook {
   position: absolute;
-  width: 180px;
-  height: 180px;
+  width: 50%;
+  height: 100%;
   right: 0px;
   bottom: 0px;
   background-color: rgba(255, 255, 255, 0.1);
