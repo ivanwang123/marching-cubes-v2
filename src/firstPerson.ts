@@ -86,13 +86,14 @@ const skybox = new THREE.Mesh(skyboxGeom, materialArray);
 scene.add(skybox);
 
 /* ============ CONTROLS ============ */
+const modal = document.getElementById("modal");
+const topBar = document.getElementById("top-bar");
+const mobileTopBar = document.getElementById("mobile-top-bar");
 
 if (!isMobile) {
-  const modal = document.getElementById("modal");
-  const topBar = document.getElementById("top-bar");
-  const mobileTopBar = document.getElementById("mobile-top-bar");
-
   if (mobileTopBar) mobileTopBar.style.display = "none";
+  if (modal) modal.style.display = "grid";
+  if (topBar) topBar.style.display = "none";
 
   new PointerLockControls(camera, document.body);
 
@@ -137,10 +138,6 @@ const onControllerMove = (value: THREE.Vector2) => {
 };
 
 if (isMobile) {
-  const modal = document.getElementById("modal");
-  const topBar = document.getElementById("top-bar");
-  const mobileTopBar = document.getElementById("mobile-top-bar");
-
   if (mobileTopBar) mobileTopBar.style.display = "block";
   if (modal) modal.style.display = "none";
   if (topBar) topBar.style.display = "none";

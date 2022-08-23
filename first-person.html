@@ -13,10 +13,13 @@
   </head>
   <body>
     <div class="absolute inset-1/2 text-white font-bold z-50">+</div>
-    <div id="mobile-top-bar" class="hidden absolute inset-x-2 top-2 z-50">
+    <div
+      id="mobile-top-bar"
+      class="hidden absolute inset-x-2 top-2 text-white z-50"
+    >
       <a
         href="noise-editor.html"
-        class="flex items-center text-white underline-offset-4 hover:underline"
+        class="flex items-center underline-offset-4 hover:underline"
       >
         <svg
           class="w-5 h-5 fill-current mr-2"
@@ -30,6 +33,18 @@
         </svg>
         Back to noise editor
       </a>
+      <div class="flex mt-2">
+        <span class="bg-white text-black font-bold px-2 rounded mr-1">
+          Drag
+        </span>
+        left side to move
+      </div>
+      <div class="flex mt-2">
+        <span class="bg-white text-black font-bold px-2 rounded mr-1">
+          Drag
+        </span>
+        right side to look
+      </div>
     </div>
     <div
       id="top-bar"
@@ -41,7 +56,7 @@
     </div>
     <div
       id="modal"
-      class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 cursor-pointer z-50"
+      class="hidden absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 cursor-pointer z-50"
     >
       <a
         href="noise-editor.html"
