@@ -41,3 +41,5 @@ export type WorkerMessage = [
 ];
 
 export type WorkerReturnMessage = [x: number, z: number, meshJson: any];
+
+export type UpdateController = () => void;

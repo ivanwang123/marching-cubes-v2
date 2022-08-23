@@ -1,13 +1,18 @@
 import * as THREE from "three";
-// import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
+import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { generateMesh } from "./meshGenerator";
 import { CHUNK_SIZE, storageKeys } from "./constants";
 import { disposeNode } from "./disposeNode";
 import { editNoiseMapChunks } from "./noiseMapEditor";
-import { LoadedChunks, NoiseLayers, WorkerReturnMessage } from "./types";
+import {
+  LoadedChunks,
+  NoiseLayers,
+  UpdateController,
+  WorkerReturnMessage,
+} from "./types";
 import { getChunkKey, getSeed } from "./utils";
 // import { JoystickControls } from "three-joystick";
-import MobileController from "./mobileController";
+import { mobileController } from "./mobileController";
 import Worker from "web-worker";
 import Stats from "stats.js";
 
@@ -82,101 +87,65 @@ scene.add(skybox);
 
 /* ============ CONTROLS ============ */
 
-// const modal = document.getElementById("modal");
-// const topBar = document.getElementById("top-bar");
+if (!isMobile) {
+  const modal = document.getElementById("modal");
+  const topBar = document.getElementById("top-bar");
 
-// new PointerLockControls(camera, document.body);
+  new PointerLockControls(camera, document.body);
 
-// window.addEventListener("click", () => {
-//   document.body.requestPointerLock();
-// });
+  window.addEventListener("click", () => {
+    document.body.requestPointerLock();
+  });
 
-// document.addEventListener("pointerlockchange", () => {
-//   if (modal) {
-//     if (document.pointerLockElement === document.body) {
-//       modal.style.display = "none";
-//       if (topBar) topBar.style.display = "flex";
-//     } else {
-//       modal.style.display = "grid";
-//       if (topBar) topBar.style.display = "none";
-//     }
-//   }
-// });
-
-// const joystickControls = new JoystickControls(camera, scene);
+  document.addEventListener("pointerlockchange", () => {
+    if (modal) {
+      if (document.pointerLockElement === document.body) {
+        modal.style.display = "none";
+        if (topBar) topBar.style.display = "flex";
+      } else {
+        modal.style.display = "grid";
+        if (topBar) topBar.style.display = "none";
+      }
+    }
+  });
+}
 
 /* ============ MOBILE CONTROLS ============ */
 
-// let xycontrollerLook: MobileController;
-// let xycontrollerMove: MobileController;
+let updateControllerLook: UpdateController;
+let updateControllerMove: UpdateController;
 
-let moveVector = new THREE.Vector2();
+let mobileMove = new THREE.Vector2();
 
-// let cameraRotationXZOffset = 0;
-// let cameraRotationYOffset = 0;
-// let cameraMoveX = 0;
-// let cameraMoveY = 0;
 let cameraRotateY = 0;
 
-// const radius = 4;
-
-const onXYControllerLook = (value: THREE.Vector2) => {
-  // cameraRotationXZOffset -= value.x * 0.1;
-  // cameraRotationYOffset += value.y * 0.1;
-  // cameraRotationYOffset = Math.max(Math.min(cameraRotationYOffset, 2.5), -2.5);
-  cameraRotateY = 0;
-
+const onControllerLook = (value: THREE.Vector2) => {
   if (value.x < 0) {
-    cameraRotateY += 0.02;
-  }
-  if (value.x > 0) {
-    cameraRotateY -= 0.02;
+    cameraRotateY = 0.02;
+  } else if (value.x > 0) {
+    cameraRotateY = -0.02;
+  } else {
+    cameraRotateY = 0;
   }
 };
 
-const onXYControllerMove = (value: THREE.Vector2) => {
-  moveVector = value.clone().normalize();
-  // console.log("MOVE", moveVector);
-  // keys[0] = false;
-  // keys[1] = false;
-  // keys[2] = false;
-  // keys[3] = false;
-  // const tmpVec = [0, 0];
-  // if (value.y > 0) {
-  //   //w
-  //   tmpVec[0] += Math.cos(cameraRotationXZOffset) * 0.75;
-  //   tmpVec[1] -= Math.sin(cameraRotationXZOffset) * 0.75;
-  //   keys[0] = true;
-  // } else if (value.y < 0) {
-  //   //s
-  //   tmpVec[0] -= Math.cos(cameraRotationXZOffset) * 0.75;
-  //   tmpVec[1] += Math.sin(cameraRotationXZOffset) * 0.75;
-  //   keys[1] = true;
-  // } else if (value.x > 0) {
-  //   //a
-  //   tmpVec[0] += Math.sin(cameraRotationXZOffset) * 0.75;
-  //   tmpVec[1] += Math.cos(cameraRotationXZOffset) * 0.75;
-  //   keys[3] = true;
-  // } else if (value.x < 0) {
-  //   //d
-  //   tmpVec[0] -= Math.sin(cameraRotationXZOffset) * 0.75;
-  //   tmpVec[1] -= Math.cos(cameraRotationXZOffset) * 0.75;
-  //   keys[2] = true;
-  // }
-  // cameraMoveX = tmpVec[0];
-  // cameraMoveY = tmpVec[1];
+const onControllerMove = (value: THREE.Vector2) => {
+  mobileMove = value.clone().normalize();
 };
 
 if (isMobile) {
-  // xycontrollerLook =
-  new MobileController(
+  const modal = document.getElementById("modal");
+  const topBar = document.getElementById("top-bar");
+  if (modal) modal.style.display = "none";
+  if (topBar) topBar.style.display = "none";
+
+  updateControllerLook = mobileController(
     document.getElementById("XYControllerLook") as HTMLCanvasElement,
-    onXYControllerLook
+    onControllerLook
   );
-  // xycontrollerMove =
-  new MobileController(
+  updateControllerMove = mobileController(
     document.getElementById("XYControllerMove") as HTMLCanvasElement,
-    onXYControllerMove
+    onControllerMove
   );
 }
 
@@ -321,21 +290,17 @@ function move() {
         camera.position.z += moveX;
       }
     } else {
-      // Mobile
-      // console.log("MOVE", moveVector.normalize());
-      if (moveVector.x !== 0 && moveVector.y !== 0) {
+      if (mobileMove.x !== 0 && mobileMove.y !== 0) {
         const theta =
-          (Math.abs(moveVector.x) / moveVector.x) * Math.acos(moveVector.y);
-        // console.log("THETA", theta * (180 / Math.PI));
-        // Math.abs(moveVector.x) / moveVector.x) *
-        const moveX2 =
+          (Math.abs(mobileMove.x) / mobileMove.x) * Math.acos(mobileMove.y);
+        const mobileMoveX =
           normalizedCameraDir.x * Math.cos(theta) -
           normalizedCameraDir.y * Math.sin(theta);
-        const moveZ2 =
+        const mobileMoveZ =
           normalizedCameraDir.x * Math.sin(theta) +
           normalizedCameraDir.y * Math.cos(theta);
-        camera.position.x += moveX2 * MOVE_SPEED;
-        camera.position.z += moveZ2 * MOVE_SPEED;
+        camera.position.x += mobileMoveX * MOVE_SPEED;
+        camera.position.z += mobileMoveZ * MOVE_SPEED;
       }
     }
   }
@@ -442,47 +407,13 @@ function animation(_time: number) {
   camera.getWorldDirection(cameraDir);
   raycaster.set(camera.position, cameraDir);
 
-  // joystickControls.update((movement) => {
-  //   if (movement) {
-  //     /**
-  //      * The values reported back might be too large for your scene.
-  //      * In that case you will need to control the sensitivity.
-  //      */
-  //     const sensitivity = 0.002;
-
-  //     /**
-  //      * Do something with the values, for example changing the position
-  //      * of the object
-  //      */
-  //     camera.position.x += movement.moveX * sensitivity;
-  //     camera.position.z += movement.moveY * sensitivity;
-  //   }
-  // });
-
   if (isMobile) {
-    // console.log(
-    //   Math.cos(cameraRotationXZOffset),
-    //   Math.atan(cameraRotationYOffset),
-    //   Math.sin(cameraRotationXZOffset)
-    // );
-    // camera.position.set(
-    //   camera.position.x + radius * Math.cos(cameraRotationXZOffset),
-    //   camera.position.y + radius * Math.atan(cameraRotationYOffset),
-    //   camera.position.z + radius * Math.sin(cameraRotationXZOffset)
-    // );
-    // camera.position.x += cameraMoveX;
-    // camera.position.z += cameraMoveY;
+    updateControllerLook();
+    updateControllerMove();
 
     camera.rotateY(cameraRotateY);
-
-    // camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), cameraRotateY);
-    // camera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), cameraRotateX);
-    // camera.lookAt(
-    //   camera.position.x,
-    //   camera.position.y + 1.5,
-    //   camera.position.z
-    // );
   }
+
   move();
 
   editTerrain();
