@@ -2,7 +2,7 @@
 
 <p align="center">
    <i>
-      A 3D terrain generator
+      A 3D terrain generator and editor
    </i>
 </p>
 
