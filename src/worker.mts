@@ -27,5 +27,3 @@ addEventListener("message", (e: MessageEvent<WorkerMessage>) => {
   }
   postMessage([e.data[0], e.data[1], mesh.toJSON()]);
 });
-
-export {};
