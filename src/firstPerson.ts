@@ -506,6 +506,17 @@ window.addEventListener("resize", function () {
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+
+  if (isMobile) {
+    updateControllerLook = mobileController(
+      document.getElementById("controller-look") as HTMLCanvasElement,
+      onControllerLook
+    );
+    updateControllerMove = mobileController(
+      document.getElementById("controller-move") as HTMLCanvasElement,
+      onControllerMove
+    );
+  }
 });
 
 const canvas = document.getElementById("app") as HTMLCanvasElement;
