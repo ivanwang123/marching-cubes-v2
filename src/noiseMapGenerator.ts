@@ -3,7 +3,6 @@ import { CHUNK_HEIGHT, CHUNK_SIZE, DEFAULT_NOISE_LAYERS } from "./constants";
 import { NoiseLayers, NoiseMap, NoiseMapCache, Seed } from "./types";
 import { getChunkKey } from "./utils";
 
-// let initialCache = true;
 let noiseMapCache: NoiseMapCache = {};
 
 export function generateNoiseMap(
@@ -64,8 +63,6 @@ export function generateNoiseMap(
           noiseOffset = 2;
         } else if (y < 10) {
           noiseOffset = 0.002 * Math.pow(y - 10, 3);
-          // } else if (y > CHUNK_HEIGHT - 10) {
-          //   noiseOffset = 0.002 * Math.pow(y - (CHUNK_HEIGHT - 10), 3);
         } else {
           noiseOffset = (y - 10) / 20;
         }
