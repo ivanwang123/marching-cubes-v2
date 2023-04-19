@@ -133,7 +133,7 @@ From taking seconds just to render a few chunks, to an infinite chunk generator 
 
 Inspired by Sebastian Lague's [Coding Adventure: Marching Cubes](https://www.youtube.com/watch?v=M3iI2l0ltbE&ab_channel=SebastianLague)
 <br/>
-Improved version of [marching-cubes](https://github.com/ivanwang123/marching-cubes) ([site](https://marching-cubes.vercel.app))
+Improved version of [marching-cubes](https://github.com/ivanwang123/marching-cubes) ([live](https://marching-cubes.vercel.app))
 
 [//]: #
 [three.js]: https://threejs.org
